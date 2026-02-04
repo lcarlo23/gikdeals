@@ -1,0 +1,53 @@
+/* Fonts */
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/src/assets/fonts/Orbitron-VariableFont_wght.woff2") format("woff2-variations"),
+    url("/src/assets/fonts/Orbitron-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Exo 2";
+  src: url("/src/assets/fonts/Exo2-VariableFont_wght.woff2") format("woff2-variations"),
+    url("/src/assets/fonts/Exo2-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Exo 2";
+  src: url("/src/assets/fonts/Exo2-Italic-VariableFont_wght.woff2") format("woff2-variations"),
+    url("/src/assets/fonts/Exo2-Italic-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Variables */
+
+:root {
+  --bg-color: #050505;
+  --accent-color: #BC13FE;
+  --buttons-color: #FF003C;
+  --secondary-bg-color: #121212;
+  --text-color: #E0E0E0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Orbitron", sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: "Exo 2", sans-serif;
+  color: var(--text-color);
+}
