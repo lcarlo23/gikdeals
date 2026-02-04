@@ -38,9 +38,16 @@
 :root {
   --bg-color: #050505;
   --accent-color: #bc13fe;
-  --buttons-color: #ff003c;
+  --button-color: #ff003c;
   --secondary-bg-color: #121212;
   --text-color: #e0e0e0;
+  --bg-gradient:
+    radial-gradient(
+      circle at top left,
+      var(--accent-color) -50%,
+      transparent 90%
+    ),
+    radial-gradient(circle at bottom, var(--button-color) -50%, transparent 90%);
 }
 
 /* Styling */
@@ -59,10 +66,53 @@ body {
   font-family: "Exo 2", sans-serif;
   color: var(--text-color);
   padding: 1rem;
+  display: grid;
+}
+
+body section {
+  margin-top: 1rem;
+}
+
+header,
+div {
+  background: var(--secondary-bg-color);
 }
 
 header {
-  padding: 1rem;
-  background-color: var(--secondary-bg-color);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+input {
+  border-radius: 0.25rem;
+  padding: 0.25rem 1rem;
+  border: none;
+}
+
+#hero-section {
+  display: grid;
+  grid-template-areas: "hero hero hero favorites";
+  gap: 1rem;
+  height: 40vh;
+}
+
+section div {
   border-radius: 1rem;
+  padding: 1rem;
+}
+
+#hero {
+  grid-area: hero;
+}
+
+#favorites {
+  grid-area: favorites;
+}
+
+#latest-giveaways,
+#best-deals {
+  min-height: 20vh;
 }
