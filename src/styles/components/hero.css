@@ -1,14 +1,53 @@
+@import "../global.css";
+
 #hero-section {
   display: grid;
-  grid-template-areas: "hero hero hero favorites";
+  grid-template-columns: 2fr 1fr;
   gap: 1rem;
-  height: 40vh;
 }
 
 #hero {
-  grid-area: hero;
+  position: relative;
+
+  &::after {
+    content: "GIVEAWAY";
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-image: var(--bg-gradient);
+    font-size: 1.5rem;
+    font-weight: 900;
+    padding: 0 1rem;
+    border-radius: 1rem;
+  }
+
+  .card {
+    grid-template-rows: 2fr 1fr;
+  }
+
+  .description {
+    padding: 1rem;
+  }
 }
 
 #favorites {
-  grid-area: favorites;
+  background-color: var(--secondary-bg-color);
+  padding: 1rem;
+  border-radius: 1rem;
+
+  #fav-list {
+    margin-top: 1rem;
+    display: grid;
+    place-content: center;
+    text-align: center;
+  }
+
+  a {
+    color: var(--button-color);
+    transition: color 0.25s ease;
+
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
 }

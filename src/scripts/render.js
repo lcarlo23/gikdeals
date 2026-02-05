@@ -1,4 +1,4 @@
-import { createCard, getData } from "./utils";
+import { cleanTitle, createCard, getData } from "./utils";
 
 export async function renderCards(
   parentElement,
@@ -8,41 +8,45 @@ export async function renderCards(
   end = undefined,
 ) {
   const gameList = await getData(url);
-  const container = document.createElement("div");
   const storeList = await getData("/json/cheapshark_stores.json");
 
-  container.classList.add("cards-container");
-
   gameList.slice(start, end + start).forEach(async (item) => {
-    let store = item.platforms;
+    let image;
+    let title;
+    let store;
+    let sale;
+    let price;
 
     if (deals) {
+      image = item.thumb;
+      title = item.title;
       store = storeList.filter((st) => st.storeID === item.storeID)[0]
         .storeName;
+      sale = `$${item.salePrice}`;
+      price = `$${item.normalPrice}`;
+    } else {
+      image = item.thumbnail;
+      title = cleanTitle(item.title);
+      store = item.platforms;
+      sale = "FREE";
+      price = item.worth;
     }
 
-    createCard(
-      item.thumbnail ?? item.thumb,
-      item.title,
-      store,
-      item.worth ?? `$${item.salePrice}`,
-      container,
-    );
+    createCard(image, title, store, sale, price, parentElement);
   });
-
-  parentElement.appendChild(container);
 }
 
 export async function renderHero(parentElement, url) {
-  const gameList = await getData(url);
+  const game = (await getData(url))[0];
+  const title = cleanTitle(game.title);
+  const sale = "FREE";
 
-  gameList.slice(0, 1).forEach(async (item) => {
-    createCard(
-      item.image,
-      item.title,
-      item.platforms,
-      item.worth,
-      parentElement,
-    );
-  });
+  createCard(
+    game.image,
+    title,
+    game.platforms,
+    sale,
+    game.worth,
+    parentElement,
+  );
 }

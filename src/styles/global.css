@@ -3,9 +3,9 @@
 @font-face {
   font-family: "Orbitron";
   src:
-    url("/src/assets/fonts/Orbitron-VariableFont_wght.woff2")
+    url("/assets/fonts/Orbitron-VariableFont_wght.woff2")
       format("woff2-variations"),
-    url("/src/assets/fonts/Orbitron-VariableFont_wght.woff2") format("woff2");
+    url("/assets/fonts/Orbitron-VariableFont_wght.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -14,9 +14,8 @@
 @font-face {
   font-family: "Exo 2";
   src:
-    url("/src/assets/fonts/Exo2-VariableFont_wght.woff2")
-      format("woff2-variations"),
-    url("/src/assets/fonts/Exo2-VariableFont_wght.woff2") format("woff2");
+    url("/assets/fonts/Exo2-VariableFont_wght.woff2") format("woff2-variations"),
+    url("/assets/fonts/Exo2-VariableFont_wght.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -25,9 +24,9 @@
 @font-face {
   font-family: "Exo 2";
   src:
-    url("/src/assets/fonts/Exo2-Italic-VariableFont_wght.woff2")
+    url("/assets/fonts/Exo2-Italic-VariableFont_wght.woff2")
       format("woff2-variations"),
-    url("/src/assets/fonts/Exo2-Italic-VariableFont_wght.woff2") format("woff2");
+    url("/assets/fonts/Exo2-Italic-VariableFont_wght.woff2") format("woff2");
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -44,10 +43,14 @@
   --bg-gradient:
     radial-gradient(
       circle at top left,
-      var(--accent-color) -50%,
+      var(--accent-color) 0%,
       transparent 90%
     ),
-    radial-gradient(circle at bottom, var(--button-color) -50%, transparent 90%);
+    radial-gradient(
+      circle at bottom right,
+      var(--button-color) 0%,
+      transparent 90%
+    );
 }
 
 /* Styling */
@@ -70,12 +73,10 @@ body {
 }
 
 section {
-  margin-top: 1rem;
-}
-
-header,
-div {
-  background: var(--secondary-bg-color);
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
 header {
@@ -84,15 +85,29 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--secondary-bg-color);
 }
 
 input {
   border-radius: 0.25rem;
   padding: 0.25rem 1rem;
   border: none;
+  background-color: var(--text-color);
 }
 
-div {
-  border-radius: 1rem;
-  padding: 1rem;
+a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.75rem;
 }

@@ -13,20 +13,31 @@ export async function getData(url) {
   }
 }
 
-export function createCard(image, title, platform, price, parentElement) {
+export function createCard(image, title, platform, sale, price, parentElement) {
   const parent = parentElement;
   const card = document.createElement("div");
 
   card.classList.add("card");
 
   card.innerHTML = `
-  <img src="${image}" />
-  <h4 class="title">${title}</h4>
-  <div class="details-container">
-  <p class="platform">${platform}</p>
-  <p class="price">${price}</p>
+  <div class="img-container">
+    <img src="${image}" />
+  </div>
+  <div class="description">
+    <h4 class="title">${title}</h4>
+    <div class="platform">
+      <p>${platform}</p>
+      <div class="price">
+        <p class="sale">${sale}</p>
+        <p class="normal-price">${price}</p>
+      </div>
+    </div>
   </div>
   `;
 
   parent.appendChild(card);
+}
+
+export function cleanTitle(title) {
+  return title.split(" (")[0];
 }
