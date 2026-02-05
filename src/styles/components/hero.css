@@ -1,0 +1,14 @@
+#hero-section {
+  display: grid;
+  grid-template-areas: "hero hero hero favorites";
+  gap: 1rem;
+  height: 40vh;
+}
+
+#hero {
+  grid-area: hero;
+}
+
+#favorites {
+  grid-area: favorites;
+}

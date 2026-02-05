@@ -1,0 +1,17 @@
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  .card {
+    img {
+      width: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .details-container {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

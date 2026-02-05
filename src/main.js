@@ -1,11 +1,15 @@
-import "/src/styles/global.css";
-import "/src/styles/reset.css";
+import "/src/styles/main.css";
 
-import { renderGiveaways } from "./scripts/render";
+import { renderCards, renderHero } from "./scripts/render";
 
-(async () => {
-  const giveawaysDiv = document.getElementById("latest-giveaways");
-  const url = "/json/gamerpower.json";
+(() => {
+  const heroContainer = document.getElementById("hero");
+  const giveawaysContainer = document.getElementById("latest-giveaways");
+  const dealsContainer = document.getElementById("best-deals");
+  const giveaways = "/json/gamerpower.json";
+  const deals = "/json/cheapshark.json";
 
-  renderGiveaways(giveawaysDiv, 4, url);
+  renderHero(heroContainer, giveaways);
+  renderCards(giveawaysContainer, giveaways, false, 1, 4);
+  renderCards(dealsContainer, deals, true, 0, 8);
 })();

@@ -69,7 +69,7 @@ body {
   display: grid;
 }
 
-body section {
+section {
   margin-top: 1rem;
 }
 
@@ -92,27 +92,7 @@ input {
   border: none;
 }
 
-#hero-section {
-  display: grid;
-  grid-template-areas: "hero hero hero favorites";
-  gap: 1rem;
-  height: 40vh;
-}
-
-section div {
+div {
   border-radius: 1rem;
   padding: 1rem;
-}
-
-#hero {
-  grid-area: hero;
-}
-
-#favorites {
-  grid-area: favorites;
-}
-
-#latest-giveaways,
-#best-deals {
-  min-height: 20vh;
 }
