@@ -1,4 +1,4 @@
-import { cleanTitle, createCard, getData } from "./utils";
+import { cleanTitle, createCard, getData, loadTemplate } from "./utils";
 
 export async function renderCards(
   parentElement,
@@ -47,4 +47,9 @@ export async function renderHero(parentElement, data) {
   const card = createCard(game.image, title, game.platforms, sale, game.worth);
 
   parentElement.appendChild(card);
+}
+
+export async function renderTemplate(path, parentElement) {
+  const template = await loadTemplate(path);
+  parentElement.innerHTML = template;
 }

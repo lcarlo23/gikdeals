@@ -40,3 +40,9 @@ export function createCard(image, title, platform, sale, price) {
 export function cleanTitle(title) {
   return title.split(" (")[0];
 }
+
+export async function loadTemplate(path) {
+  const response = await fetch(path);
+  const template = await response.text();
+  return template;
+}
