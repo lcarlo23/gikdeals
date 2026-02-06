@@ -40,7 +40,7 @@ export async function renderCards(
       price = item.worth;
     }
 
-    const card = createCard(image, title, store, sale, price);
+    let card = await createCard(image, title, store, sale, price);
 
     card.dataset.id = item.id ?? item.gameID;
 
@@ -53,7 +53,15 @@ export async function renderHero(parentElement, data) {
   const title = cleanTitle(game.title);
   const sale = "FREE";
 
-  const card = createCard(game.image, title, game.platforms, sale, game.worth);
+  const card = await createCard(
+    game.image,
+    title,
+    game.platforms,
+    sale,
+    game.worth,
+  );
+
+  card.dataset.id = game.id ?? game.gameID;
 
   parentElement.appendChild(card);
 }

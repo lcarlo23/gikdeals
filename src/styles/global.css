@@ -74,9 +74,6 @@ body {
 
 section {
   margin: 2rem 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
 }
 
 header {
@@ -86,13 +83,13 @@ header {
   justify-content: space-between;
   align-items: center;
   background: var(--secondary-bg-color);
-}
 
-input {
-  border-radius: 0.25rem;
-  padding: 0.25rem 1rem;
-  border: none;
-  background-color: var(--text-color);
+  input {
+    border-radius: 0.25rem;
+    padding: 0.25rem 1rem;
+    border: none;
+    background-color: var(--text-color);
+  }
 }
 
 a {

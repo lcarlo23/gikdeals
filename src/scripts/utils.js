@@ -1,5 +1,3 @@
-import { renderCards } from "./render";
-
 export async function getData(url) {
   try {
     const response = await fetch(url);
@@ -15,27 +13,20 @@ export async function getData(url) {
   }
 }
 
-export function createCard(image, title, platform, sale, price) {
+export async function createCard(image, title, platform, sale, price) {
+  const template = await loadTemplate("/assets/templates/card.html");
   const card = document.createElement("div");
 
   card.classList.add("card");
 
-  card.innerHTML = `
-  <div class="img-container">
-    <img src="${image}" />
-  </div>
-  <div class="description">
-    <h4 class="title">${title}</h4>
-    <div class="platform">
-      <p>${platform}</p>
-      <div class="price">
-        <p class="sale">${sale}</p>
-        <p class="normal-price">${price}</p>
-      </div>
-    </div>
-  </div>
-  `;
+  const cardContent = template
+    .replace("{{image}}", image)
+    .replace("{{title}}", title)
+    .replace("{{platform}}", platform)
+    .replace("{{sale}}", sale)
+    .replace("{{price}}", price);
 
+  card.innerHTML = cardContent;
   return card;
 }
 
