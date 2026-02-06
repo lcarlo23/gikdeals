@@ -1,3 +1,5 @@
+import { renderCards } from "./render";
+
 export async function getData(url) {
   try {
     const response = await fetch(url);
@@ -45,4 +47,14 @@ export async function loadTemplate(path) {
   const response = await fetch(path);
   const template = await response.text();
   return template;
+}
+
+export async function getSearchData() {
+  const params = new URLSearchParams(window.location.search);
+  const term = params.get("term");
+  const data = await getData(
+    `https://www.cheapshark.com/api/1.0/games?title=${term}`,
+  );
+
+  return data;
 }

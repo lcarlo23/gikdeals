@@ -12,6 +12,7 @@
   background-image: var(--bg-gradient);
   position: relative;
   cursor: pointer;
+  max-height: 20rem;
 
   .img-container {
     overflow: hidden;
