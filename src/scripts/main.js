@@ -13,7 +13,7 @@ import { renderHeaderFooter } from "./render";
   );
   const dealsContainer = document.querySelector("#best-deals .cards-container");
 
-  const giveaways = await getData("/json/gamerpower.json");
+  const giveaways = await getData("/gamerpower-api/giveaways");
   const deals = await getData("/json/cheapshark.json");
 
   renderHero(heroContainer, giveaways);

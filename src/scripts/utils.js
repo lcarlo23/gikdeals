@@ -14,13 +14,14 @@ export async function getData(url) {
 }
 
 export async function createCard(image, title, platform, sale, price) {
-  const template = await loadTemplate("/assets/templates/card.html");
+  const template = await loadTemplate("/templates/card.html");
   const card = document.createElement("div");
 
   card.classList.add("card");
 
   const cardContent = template
-    .replace("{{image}}", image)
+    .replace("{{img-bg}}", image)
+    .replace("{{cover}}", image)
     .replace("{{title}}", title)
     .replace("{{platform}}", platform)
     .replace("{{sale}}", sale)

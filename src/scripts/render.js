@@ -51,17 +51,6 @@ export async function renderCards(
 export async function renderHero(parentElement, data) {
   const game = data[0];
   const title = cleanTitle(game.title);
-  const sale = "FREE";
-
-  const card = await createCard(
-    game.image,
-    title,
-    game.platforms,
-    sale,
-    game.worth,
-  );
-
-  card.dataset.id = game.id ?? game.gameID;
 
   parentElement.appendChild(card);
 }
@@ -74,8 +63,8 @@ export async function renderTemplate(path, parentElement) {
 export function renderHeaderFooter() {
   const header = document.querySelector("header");
   const footer = document.querySelector("footer");
-  const headerPath = "/assets/templates/header.html";
-  const footerPath = "/assets/templates/footer.html";
+  const headerPath = "/templates/header.html";
+  const footerPath = "/templates/footer.html";
 
   renderTemplate(headerPath, header);
   renderTemplate(footerPath, footer);

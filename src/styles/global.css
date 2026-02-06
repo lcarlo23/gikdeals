@@ -42,13 +42,13 @@
   --text-color: #e0e0e0;
   --bg-gradient:
     radial-gradient(
-      circle at top left,
-      var(--accent-color) 0%,
+      circle at bottom left,
+      var(--accent-color) -90%,
       transparent 90%
     ),
     radial-gradient(
       circle at bottom right,
-      var(--button-color) 0%,
+      var(--button-color) -90%,
       transparent 90%
     );
 }
@@ -74,6 +74,8 @@ body {
 
 section {
   margin: 2rem 0;
+  display: grid;
+  gap: 2rem;
 }
 
 header {
