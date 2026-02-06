@@ -1,6 +1,14 @@
-export async function getData(url) {
+export async function getData(url, rapidapi = false) {
+  const options = {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY,
+      "x-rapidapi-host": "gamerpower.p.rapidapi.com",
+    },
+  };
+
   try {
-    const response = await fetch(url);
+    const response = rapidapi ? await fetch(url, options) : await fetch(url);
 
     if (!response.ok) {
       throw new Error(`HTTP Error: ${response.status}`);

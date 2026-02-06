@@ -13,10 +13,15 @@ import { renderHeaderFooter } from "./render";
   );
   const dealsContainer = document.querySelector("#best-deals .cards-container");
 
-  const giveaways = await getData("/gamerpower-api/giveaways");
-  const deals = await getData("/json/cheapshark.json");
+  const giveaways = await getData(
+    "https://gamerpower.p.rapidapi.com/api/giveaways",
+    true,
+  );
+  const deals = await getData(
+    "https://www.cheapshark.com/api/1.0/deals?pageNumber=1&pageSize=8",
+  );
 
-  renderHero(heroContainer, giveaways);
-  renderCards(giveawaysContainer, giveaways, false, 1, 4);
-  renderCards(dealsContainer, deals, true, 0, 8);
+  // renderHero(heroContainer, giveaways);
+  renderCards(giveawaysContainer, giveaways, false, 0, 4);
+  renderCards(dealsContainer, deals, true);
 })();
