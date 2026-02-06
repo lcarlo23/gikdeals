@@ -13,8 +13,7 @@ export async function getData(url) {
   }
 }
 
-export function createCard(image, title, platform, sale, price, parentElement) {
-  const parent = parentElement;
+export function createCard(image, title, platform, sale, price) {
   const card = document.createElement("div");
 
   card.classList.add("card");
@@ -35,7 +34,7 @@ export function createCard(image, title, platform, sale, price, parentElement) {
   </div>
   `;
 
-  parent.appendChild(card);
+  return card;
 }
 
 export function cleanTitle(title) {
