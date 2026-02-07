@@ -42,13 +42,15 @@ export default class ExternalServices {
   }
 
   async searchDeals(term) {
-    const deals = await getData(`${this.cheapSharkURL}games?title=${term}`);
+    const deals = await this.getData(
+      `${this.cheapSharkURL}games?title=${term}`,
+    );
     return deals;
   }
 
   async getRandomDeal() {
     const randomNumber = Math.floor(Math.random() * 11);
-    const deals = this.getDeals(10);
+    const deals = await this.getDeals(10);
     return deals[randomNumber];
   }
 

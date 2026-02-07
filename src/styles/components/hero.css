@@ -1,32 +1,21 @@
-@import "../global.css";
-
 #hero-section {
   display: grid;
   grid-template-columns: 2fr 1fr;
+  grid-template-rows: 40rem;
   gap: 1rem;
 }
 
-#hero {
-  position: relative;
+#hero .hero-card {
+  grid-template-rows: 2fr 1fr;
+  cursor: default;
 
-  &::after {
-    content: "GIVEAWAY";
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background-image: var(--bg-gradient);
-    font-size: 1.5rem;
-    font-weight: 900;
-    padding: 0 1rem;
-    border-radius: 1rem;
+  &:hover {
+    transform: none;
   }
 
-  .card {
-    grid-template-rows: 2fr 1fr;
-  }
-
-  .description {
-    padding: 1rem;
+  .cover-container {
+    height: 100%;
+    transform: scale(0.95);
   }
 }
 

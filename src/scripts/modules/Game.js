@@ -36,6 +36,26 @@ export default class Game {
     parentElement.appendChild(card);
   }
 
+  async createHero(parentElement) {
+    const template = await loadTemplate("/templates/hero.html");
+    const card = document.createElement("div");
+
+    this.store = await this.setStore();
+
+    card.classList.add("hero-card");
+
+    const cardContent = template
+      .replace("{{img-bg}}", this.image)
+      .replace("{{cover}}", this.image)
+      .replace("{{title}}", this.title)
+      .replace("{{platform}}", this.store)
+      .replace("{{sale}}", this.sale)
+      .replace("{{price}}", this.price);
+
+    card.innerHTML = cardContent;
+    parentElement.appendChild(card);
+  }
+
   getDiscount() {
     const discount = Math.round(((this.price - this.sale) / this.price) * 100);
     return `${discount}% OFF`;
