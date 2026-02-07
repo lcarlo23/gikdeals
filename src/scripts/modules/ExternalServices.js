@@ -27,7 +27,7 @@ export default class ExternalServices {
   }
 
   async getGiveaways() {
-    const giveaways = await getData(
+    const giveaways = await this.getData(
       `${this.gamerPowerURL}giveaways`,
       this.options,
     );
@@ -35,7 +35,9 @@ export default class ExternalServices {
   }
 
   async getDeals(limit = 60) {
-    const deals = await getData(`${this.cheapSharkURL}deals?pageSize=${limit}`);
+    const deals = await this.getData(
+      `${this.cheapSharkURL}deals?pageSize=${limit}`,
+    );
     return deals;
   }
 
@@ -48,5 +50,10 @@ export default class ExternalServices {
     const randomNumber = Math.floor(Math.random() * 11);
     const deals = this.getDeals(10);
     return deals[randomNumber];
+  }
+
+  async getStoresList() {
+    const stores = await this.getData(`${this.cheapSharkURL}stores`);
+    return stores;
   }
 }

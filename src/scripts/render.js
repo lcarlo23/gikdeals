@@ -1,73 +1,10 @@
-import {
-  cleanTitle,
-  createCard,
-  getData,
-  loadTemplate,
-  getSearchData,
-} from "./utils";
-
-export async function renderCards(
-  parentElement,
-  data,
-  deals = true,
-  start = 0,
-  end = 9999,
-) {
-  const storeList = await getData("/json/cheapshark_stores.json");
-
-  data.slice(start, end + start).forEach(async (item) => {
-    let image;
-    let title;
-    let store;
-    let sale;
-    let price;
-
-    if (deals) {
-      image = item.thumb;
-      title = item.title || item.external;
-      store = item.storeID
-        ? storeList.filter((st) => st.storeID === item.storeID)[0].storeName
-        : "";
-      sale = item.salePrice
-        ? `$${item.salePrice}`
-        : `lower price: $${item.cheapest}`;
-      price = item.normalPrice ? `$${item.normalPrice}` : "";
-    } else {
-      image = item.thumbnail;
-      title = cleanTitle(item.title);
-      store = item.platforms;
-      sale = "FREE";
-      price = item.worth;
-    }
-
-    let card = await createCard(image, title, store, sale, price);
-
-    card.dataset.id = item.id ?? item.gameID;
-
-    parentElement.appendChild(card);
-  });
-}
+import { cleanTitle, getSearchData } from "./utils";
 
 export async function renderHero(parentElement, data) {
   const game = data[0];
   const title = cleanTitle(game.title);
 
   parentElement.appendChild(card);
-}
-
-export async function renderTemplate(path, parentElement) {
-  const template = await loadTemplate(path);
-  parentElement.innerHTML = template;
-}
-
-export function renderHeaderFooter() {
-  const header = document.querySelector("header");
-  const footer = document.querySelector("footer");
-  const headerPath = "/templates/header.html";
-  const footerPath = "/templates/footer.html";
-
-  renderTemplate(headerPath, header);
-  renderTemplate(footerPath, footer);
 }
 
 export async function renderSearch() {

@@ -1,27 +1,21 @@
+import ExternalServices from "./modules/ExternalServices";
+import GameList from "./modules/GameList";
+import { loadHeaderFooter } from "./utils";
 import "/styles/main.css";
 
-import { renderCards, renderHero } from "/scripts/render";
-import { getData } from "/scripts/utils";
-import { renderHeaderFooter } from "./render";
+loadHeaderFooter();
+
+const api = new ExternalServices();
+const gameList = new GameList();
+const giveawaysContainer = document.querySelector(
+  "#latest-giveaways .cards-container",
+);
+const dealsContainer = document.querySelector("#best-deals .cards-container");
 
 (async () => {
-  renderHeaderFooter();
+  const giveaways = await api.getGiveaways();
+  const deals = await api.getDeals();
 
-  const heroContainer = document.getElementById("hero");
-  const giveawaysContainer = document.querySelector(
-    "#latest-giveaways .cards-container",
-  );
-  const dealsContainer = document.querySelector("#best-deals .cards-container");
-
-  const giveaways = await getData(
-    "https://gamerpower.p.rapidapi.com/api/giveaways",
-    true,
-  );
-  const deals = await getData(
-    "https://www.cheapshark.com/api/1.0/deals?pageNumber=1&pageSize=8",
-  );
-
-  // renderHero(heroContainer, giveaways);
-  renderCards(giveawaysContainer, giveaways, false, 0, 4);
-  renderCards(dealsContainer, deals, true);
+  gameList.renderList(giveaways, giveawaysContainer, 4);
+  gameList.renderList(deals, dealsContainer, 8);
 })();
