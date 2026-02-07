@@ -40,7 +40,7 @@
   --button-color: #ff003c;
   --secondary-bg-color: #121212;
   --text-color: #e0e0e0;
-  --bg-gradient:
+  --bg-card:
     radial-gradient(
       circle at bottom left,
       var(--accent-color) -90%,
@@ -49,6 +49,17 @@
     radial-gradient(
       circle at bottom right,
       var(--button-color) -90%,
+      transparent 90%
+    );
+  --bg-button:
+    radial-gradient(
+      circle at bottom left,
+      var(--accent-color) 0%,
+      transparent 90%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      var(--button-color) 0%,
       transparent 90%
     );
 }
