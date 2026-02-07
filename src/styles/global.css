@@ -70,6 +70,8 @@ body {
   color: var(--text-color);
   padding: 1rem;
   display: grid;
+  max-width: 80rem;
+  margin: auto;
 }
 
 section {
