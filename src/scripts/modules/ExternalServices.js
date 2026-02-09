@@ -49,8 +49,8 @@ export default class ExternalServices {
   }
 
   async getRandomDeal() {
-    const randomNumber = Math.floor(Math.random() * 11);
-    const deals = await this.getDeals(10);
+    const randomNumber = Math.floor(Math.random() * 16);
+    const deals = await this.getDeals(15);
     return deals[randomNumber];
   }
 

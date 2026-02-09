@@ -5,8 +5,10 @@ import Store from "./Store";
 export default class Game {
   constructor(data) {
     this.data = data;
+    this.api = new ExternalServices();
 
-    this.image = this.data.image || this.data.thumb || this.data.thumbnail;
+    this.image =
+      this.data.image || this.data.thumb || this.data.thumbnail || "";
     this.title =
       this.data.title.split(" (")[0] ||
       this.data.external ||
@@ -37,12 +39,13 @@ export default class Game {
   }
 
   async createHero(parentElement) {
+    parentElement.replaceChildren();
+
     const template = await loadTemplate("/templates/hero.html");
     const card = document.createElement("div");
+    card.classList.add("hero-card");
 
     this.store = await this.setStore();
-
-    card.classList.add("hero-card");
 
     const cardContent = template
       .replace("{{img-bg}}", this.image)
@@ -54,6 +57,15 @@ export default class Game {
 
     card.innerHTML = cardContent;
     parentElement.appendChild(card);
+
+    const shuffleBtn = document.querySelector(".shuffle-button");
+
+    shuffleBtn.addEventListener("click", async () => {
+      const newDeal = await this.api.getRandomDeal();
+      let newHero = new Game(newDeal);
+
+      newHero.createHero(parentElement);
+    });
   }
 
   getDiscount() {
@@ -62,8 +74,7 @@ export default class Game {
   }
 
   async setStore() {
-    const api = new ExternalServices();
-    const storesList = await api.getStoresList();
+    const storesList = await this.api.getStoresList();
 
     const storeData = this.data.platforms
       ? storesList.filter((store) =>
