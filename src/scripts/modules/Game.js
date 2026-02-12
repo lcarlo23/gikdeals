@@ -25,6 +25,9 @@ export default class Game {
     this.store = await this.setStore();
 
     card.classList.add("card");
+    if (this.sale === "0.00" || this.sale === "") {
+      card.classList.add("free");
+    }
 
     const cardContent = template
       .replace("{{img-bg}}", this.image)
@@ -44,6 +47,9 @@ export default class Game {
     const template = await loadTemplate("/templates/hero.html");
     const card = document.createElement("div");
     card.classList.add("hero-card");
+    if (this.sale === "0.00" || this.sale === "") {
+      card.classList.add("free");
+    }
 
     this.store = await this.setStore();
 

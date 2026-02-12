@@ -40,7 +40,7 @@
     background-image: var(--bg-card);
   }
 
-  &::after {
+  &.free::after {
     content: "GIVEAWAY";
     position: absolute;
     top: 1rem;
@@ -50,7 +50,6 @@
     font-weight: 900;
     padding: 0 1rem;
     border-radius: 1rem;
-    display: none;
   }
 
   .img-bg {
