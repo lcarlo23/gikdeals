@@ -20,6 +20,8 @@ export default class Game {
     this.price = this.data.normalPrice
       ? `$${this.data.normalPrice}`
       : this.data.worth || "";
+    this.id = this.data.gameID || this.data.id || "";
+    this.deal = this.data.dealID || this.data.cheapestDealID || "";
   }
 
   async createCard(parentElement, HTMLtemplate, search = false) {
@@ -29,6 +31,8 @@ export default class Game {
     if (!search) this.store = (await this.setStore()) || "";
     if (search) this.price = `$${this.data.cheapest}`;
     card.classList.add("card");
+    card.dataset.id = this.id;
+    card.dataset.deal = this.deal;
 
     if (this.salePrice === "$0.00" || this.salePrice === "") {
       card.classList.add("free");
@@ -43,6 +47,7 @@ export default class Game {
       .replace("{{price}}", this.price);
 
     card.innerHTML = cardContent;
+
     parentElement.appendChild(card);
   }
 
@@ -79,12 +84,12 @@ export default class Game {
     });
   }
 
-  getDiscount() {
-    const discount = Math.round(
-      ((this.price - this.salePrice) / this.price) * 100,
-    );
-    return `${discount}% OFF`;
-  }
+  // getDiscount() {
+  //   const discount = Math.round(
+  //     ((this.price - this.salePrice) / this.price) * 100,
+  //   );
+  //   return `${discount}% OFF`;
+  // }
 
   async setStore() {
     const storeList = await this.api.getStoresList();

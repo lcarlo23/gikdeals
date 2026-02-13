@@ -17,26 +17,9 @@
     height: 100%;
   }
 
-  button {
-    border: none;
-    background: none;
-    background-image: var(--bg-button);
-    font-size: 1.5rem;
-    font-weight: 900;
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    color: var(--text-color);
-    transition: transform 0.5s ease;
-    cursor: pointer;
-
-    &:hover {
-      transform: scale(1.1);
-
-      span.dice {
-        display: inline-block;
-        animation: shuffle 0.5s ease;
-      }
-    }
+  & button:hover span.dice {
+    display: inline-block;
+    animation: shuffle 0.5s ease;
   }
 
   .sale {

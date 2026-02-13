@@ -1,0 +1,105 @@
+dialog.modal {
+  grid-template-rows: auto auto;
+  position: fixed;
+  border: none;
+  color: var(--text-color);
+  max-width: 80%;
+  outline: none;
+
+  &[open]::backdrop {
+    animation: blur 0.25s ease forwards;
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 3rem;
+
+    .modal-title {
+      display: grid;
+      text-align: center;
+      gap: 0.5rem;
+
+      .title {
+        font-size: 2.5rem;
+        line-height: 2.5rem;
+      }
+    }
+
+    .details {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .rating {
+      background-color: rgba(0, 0, 0, 0.25);
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+
+      .rate-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+
+        .rate-number {
+          font-size: 2rem;
+          font-weight: 700;
+          line-height: 3rem;
+        }
+      }
+    }
+
+    .buy-section {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      padding-top: 3rem;
+    }
+
+    .store-price-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      font-size: 2rem;
+
+      .price-box {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .price {
+        .sale {
+          font-size: 3rem;
+        }
+
+        .normal-price {
+          font-size: 1.5rem;
+          align-self: flex-end;
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
+@keyframes blur {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(0.25rem);
+  }
+}

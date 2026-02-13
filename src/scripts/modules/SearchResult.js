@@ -1,6 +1,5 @@
 import { loadTemplate } from "../utils";
 import ExternalServices from "./ExternalServices";
-import Store from "./Store";
 
 export default class SearchResult {
   constructor(data) {

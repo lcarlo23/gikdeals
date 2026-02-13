@@ -1,5 +1,3 @@
-import RenderManager from "./RenderManager";
-
 export default class ExternalServices {
   constructor() {
     this.gamerPowerURL = "https://gamerpower.p.rapidapi.com/api/";
@@ -59,5 +57,10 @@ export default class ExternalServices {
   async getStoresList() {
     const stores = await this.getData(`${this.cheapSharkURL}stores`);
     return stores;
+  }
+
+  async getGameById(id) {
+    const game = await this.getData(`${this.cheapSharkURL}deals?id=${id}`);
+    return game;
   }
 }
