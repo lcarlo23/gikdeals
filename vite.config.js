@@ -11,26 +11,13 @@ export default defineConfig({
 
   appType: "mpa",
 
-  server: {
-    proxy: {
-      "^/search": {
-        target: "http://localhost:5173",
-        rewrite: () => "/pages/search/index.html",
-      },
-      "^/favorites": {
-        target: "http://localhost:5173",
-        rewrite: () => "/pages/favorites/index.html",
-      },
-    },
-  },
-
   build: {
     outDir: "../dist",
     rollupOptions: {
       input: {
         main: resolve(__dirname, "src/index.html"),
-        search: resolve(__dirname, "src/pages/search/index.html"),
-        favorites: resolve(__dirname, "src/pages/favorites/index.html"),
+        search: resolve(__dirname, "src/search/index.html"),
+        favorites: resolve(__dirname, "src/favorites/index.html"),
       },
     },
   },
