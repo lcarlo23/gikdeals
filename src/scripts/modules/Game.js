@@ -22,7 +22,7 @@ export default class Game {
     const template = await loadTemplate(HTMLtemplate);
     const card = document.createElement("div");
 
-    if (!search) this.store = await this.setStore();
+    if (!search) this.store = (await this.setStore()) || "";
 
     card.classList.add("card");
     if (this.sale === "0.00" || this.sale === "") {
@@ -80,18 +80,19 @@ export default class Game {
   }
 
   async setStore() {
-    const storesList = await this.api.getStoresList();
+    const storeList = await this.api.getStoresList();
 
     const storeData = this.data.platforms
-      ? storesList.filter((store) =>
+      ? storeList.find((store) =>
           this.data.platforms
             .toLowerCase()
             .includes(store.storeName.toLowerCase()),
-        )[0]
-      : storesList.filter((store) => store.storeID === this.data.storeID)[0];
+        )
+      : storeList.find((store) => store.storeID === this.data.storeID);
+
+    if (!storeData) return;
 
     const store = new Store(storeData);
-
     return store.getLogo();
   }
 }
