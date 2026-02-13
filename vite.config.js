@@ -7,6 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   root: "src/",
   publicDir: "../public",
+  envDir: "./",
 
   appType: "mpa",
 
