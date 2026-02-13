@@ -1,14 +1,15 @@
+import "/styles/main.css";
+
 import ExternalServices from "./modules/ExternalServices";
-import GameList from "./modules/GameList";
+import RenderManager from "./modules/RenderManager";
 import Game from "./modules/Game";
 import { loadHeaderFooter } from "./utils";
-import "/styles/main.css";
 
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
   const api = new ExternalServices();
-  const gameList = new GameList();
+  const gameList = new RenderManager();
   const randomDeal = await api.getRandomDeal();
   const hero = await new Game(randomDeal);
   const giveaways = await api.getGiveaways();
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     "#latest-giveaways .cards-container",
   );
 
-  gameList.renderList(giveaways, giveawaysContainer, 4);
-  gameList.renderList(deals, dealsContainer, 8);
+  gameList.renderGameList(giveaways, giveawaysContainer, 4);
+  gameList.renderGameList(deals, dealsContainer, 8);
   hero.createHero(heroContainer);
 });

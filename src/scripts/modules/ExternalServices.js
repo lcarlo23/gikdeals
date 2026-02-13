@@ -1,3 +1,5 @@
+import RenderManager from "./RenderManager";
+
 export default class ExternalServices {
   constructor() {
     this.gamerPowerURL = "https://gamerpower.p.rapidapi.com/api/";
