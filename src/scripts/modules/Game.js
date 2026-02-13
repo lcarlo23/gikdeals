@@ -10,7 +10,7 @@ export default class Game {
     this.image =
       this.data.image || this.data.thumb || this.data.thumbnail || "";
     this.title =
-      this.data.title.split(" (")[0] ||
+      this.data.title?.split(" (")[0] ||
       this.data.external ||
       "No title available";
     this.store;
@@ -18,11 +18,11 @@ export default class Game {
     this.price = this.data.normalPrice || this.data.worth || "";
   }
 
-  async createCard(parentElement) {
-    const template = await loadTemplate("/templates/card.html");
+  async createCard(parentElement, HTMLtemplate, search = false) {
+    const template = await loadTemplate(HTMLtemplate);
     const card = document.createElement("div");
 
-    this.store = await this.setStore();
+    if (!search) this.store = await this.setStore();
 
     card.classList.add("card");
     if (this.sale === "0.00" || this.sale === "") {
@@ -81,6 +81,7 @@ export default class Game {
 
   async setStore() {
     const storesList = await this.api.getStoresList();
+    console.log(storesList);
 
     const storeData = this.data.platforms
       ? storesList.filter((store) =>
@@ -90,6 +91,7 @@ export default class Game {
         )[0]
       : storesList.filter((store) => store.storeID === this.data.storeID)[0];
 
+    console.log(storeData);
     const store = new Store(storeData);
 
     return store.getLogo();

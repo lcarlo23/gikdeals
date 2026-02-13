@@ -1,9 +1,12 @@
-// import "/styles/main.css";
+import "/styles/main.css";
 
-// import { renderHeaderFooter, renderSearch, renderSearchTitle } from "./render";
+import RenderManager from "./modules/RenderManager";
+import { loadHeaderFooter } from "./utils";
 
-// (async () => {
-//   renderHeaderFooter();
-//   renderSearch();
-//   renderSearchTitle();
-// })();
+loadHeaderFooter();
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const renderer = new RenderManager();
+
+  await renderer.renderSearch();
+});
