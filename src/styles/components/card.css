@@ -97,11 +97,10 @@
     box-shadow: 0 -1rem 2rem 0.5rem rgba(0, 0, 0, 0.5);
 
     .title {
+      font-family: "Exo 2", sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.5rem;
       text-align: center;
-      font-size: 1.25rem;
-      line-height: 1.25rem;
-      font-weight: 100;
-      letter-spacing: 0.1rem;
     }
   }
 
