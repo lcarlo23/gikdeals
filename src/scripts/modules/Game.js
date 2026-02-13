@@ -81,7 +81,6 @@ export default class Game {
 
   async setStore() {
     const storesList = await this.api.getStoresList();
-    console.log(storesList);
 
     const storeData = this.data.platforms
       ? storesList.filter((store) =>
@@ -91,7 +90,6 @@ export default class Game {
         )[0]
       : storesList.filter((store) => store.storeID === this.data.storeID)[0];
 
-    console.log(storeData);
     const store = new Store(storeData);
 
     return store.getLogo();
