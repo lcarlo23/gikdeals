@@ -14,8 +14,12 @@ export default class Game {
       this.data.external ||
       "No title available";
     this.store;
-    this.sale = this.data.salePrice || this.data.cheapest || "";
-    this.price = this.data.normalPrice || this.data.worth || "";
+
+    const sale = this.data.salePrice || this.data.cheapest;
+    this.salePrice = sale ? `$${sale}` : "";
+    this.price = this.data.normalPrice
+      ? `$${this.data.normalPrice}`
+      : this.data.worth || "";
   }
 
   async createCard(parentElement, HTMLtemplate, search = false) {
@@ -23,9 +27,10 @@ export default class Game {
     const card = document.createElement("div");
 
     if (!search) this.store = (await this.setStore()) || "";
-
+    if (search) this.price = `$${this.data.cheapest}`;
     card.classList.add("card");
-    if (this.sale === "0.00" || this.sale === "") {
+
+    if (this.salePrice === "$0.00" || this.salePrice === "") {
       card.classList.add("free");
     }
 
@@ -34,7 +39,7 @@ export default class Game {
       .replace("{{cover}}", this.image)
       .replace("{{title}}", this.title)
       .replace("{{platform}}", this.store)
-      .replace("{{sale}}", this.sale)
+      .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price);
 
     card.innerHTML = cardContent;
@@ -47,7 +52,7 @@ export default class Game {
     const template = await loadTemplate("/templates/hero.html");
     const card = document.createElement("div");
     card.classList.add("hero-card");
-    if (this.sale === "0.00" || this.sale === "") {
+    if (this.salePrice === "0.00" || this.salePrice === "") {
       card.classList.add("free");
     }
 
@@ -58,7 +63,7 @@ export default class Game {
       .replace("{{cover}}", this.image)
       .replace("{{title}}", this.title)
       .replace("{{platform}}", this.store)
-      .replace("{{sale}}", this.sale)
+      .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price);
 
     card.innerHTML = cardContent;
@@ -75,7 +80,9 @@ export default class Game {
   }
 
   getDiscount() {
-    const discount = Math.round(((this.price - this.sale) / this.price) * 100);
+    const discount = Math.round(
+      ((this.price - this.salePrice) / this.price) * 100,
+    );
     return `${discount}% OFF`;
   }
 

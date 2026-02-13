@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const giveaways = await api.getGiveaways();
   const deals = await api.getDeals();
 
-  const dealsContainer = document.querySelector("#best-deals .cards-container");
   const heroContainer = document.getElementById("hero");
+  const dealsContainer = document.querySelector("#best-deals .cards-container");
   const giveawaysContainer = document.querySelector(
     "#latest-giveaways .cards-container",
   );

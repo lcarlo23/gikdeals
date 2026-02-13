@@ -6,7 +6,7 @@ import { loadHeaderFooter } from "./utils";
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const renderer = new RenderManager();
+  const render = new RenderManager();
 
-  await renderer.renderSearch();
+  await render.renderSearch();
 });

@@ -105,17 +105,18 @@
     }
   }
 
-  .platform {
+  .details {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     .price {
-      text-align: center;
+      text-align: right;
     }
 
-    .sale {
-      font-size: 1.25rem;
+    .sale,
+    .cheapest {
+      font-size: 1.5rem;
       font-weight: 700;
     }
 
