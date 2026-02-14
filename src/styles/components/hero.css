@@ -13,6 +13,10 @@
     transform: none;
   }
 
+  .title {
+    font-size: 2rem;
+  }
+
   .cover-container {
     height: 100%;
   }
