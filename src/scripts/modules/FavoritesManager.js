@@ -32,19 +32,16 @@ export default class FavoritesManager {
 
   checkID(game, favorites) {
     const dealID = game.dealID || game.gameInfo?.dealID;
-    const gameID = game.gameID || game.gameInfo?.gameID;
     const id = game.id;
 
     return favorites.findIndex((fav) => {
       const favDeal = fav.dealID || fav.gameInfo?.dealID;
-      const favGame = fav.gameID || fav.gameInfo?.gameID;
       const favId = fav.id;
 
       const matchDeal = dealID && favDeal && dealID === favDeal;
-      const matchGame = gameID && favGame && gameID === favGame;
       const matchId = id && favId && id === favId;
 
-      return matchDeal || matchGame || matchId;
+      return matchGame || matchId;
     });
   }
 }

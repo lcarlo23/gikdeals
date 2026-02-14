@@ -24,8 +24,7 @@ export default class Game {
     this.price = this.data.normalPrice
       ? `$${this.data.normalPrice}`
       : this.data.worth || "";
-    this.id = this.data.gameID || this.data.id || "";
-    this.deal = this.data.dealID || this.data.cheapestDealID || "";
+    this.id = this.data.dealID || this.data.id || "";
   }
 
   async createCard(parentElement, HTMLtemplate, search = false) {
@@ -36,8 +35,6 @@ export default class Game {
     if (search) this.price = `$${this.data.cheapest}`;
     card.classList.add("card");
     card.dataset.id = this.id;
-
-    if (this.deal) card.dataset.deal = this.deal;
 
     if (this.salePrice === "$0.00" || this.salePrice === "") {
       card.classList.add("free");
@@ -70,7 +67,7 @@ export default class Game {
       card.classList.add("free");
     }
 
-    const storePage = `https://www.cheapshark.com/redirect?dealID=${this.deal}`;
+    const storePage = `https://www.cheapshark.com/redirect?dealID=${this.id}`;
 
     this.store = await this.setStore();
 

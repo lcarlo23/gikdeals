@@ -40,8 +40,10 @@
     flex-direction: column;
     gap: 1rem;
 
-    a {
+    a,
+    button {
       text-align: center;
+      width: 100%;
     }
   }
 }

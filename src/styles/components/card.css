@@ -124,7 +124,7 @@
     transform: scale(1.025);
 
     .cover-container .cover {
-      transform: scale(1.5);
+      transform: scale(1.25);
     }
   }
 }

@@ -31,10 +31,10 @@ export default class RenderManager {
         return;
       }
 
-      const id = card.dataset.id || card.dataset.deal;
+      const id = card.dataset.id;
 
       if (fav) {
-        const game = await this.api.getGameById(id, !card.dataset.deal);
+        const game = await this.api.getGameById(id, !isNaN(Number(id)));
 
         this.favMan.toggleFavorites(game);
 
@@ -45,7 +45,7 @@ export default class RenderManager {
         return;
       }
 
-      this.renderModal(id, !card.hasAttribute("data-deal"));
+      this.renderModal(id, !isNaN(Number(id)));
     });
   }
 
@@ -65,6 +65,7 @@ export default class RenderManager {
     let template = giveaway
       ? await loadTemplate("/templates/modal-giveaway.html")
       : await loadTemplate("/templates/modal.html");
+
     const modal = document.createElement("dialog");
     const body = document.querySelector("body");
 
