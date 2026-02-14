@@ -49,8 +49,11 @@ export default class ExternalServices {
   }
 
   async getRandomDeal() {
-    const randomNumber = Math.floor(Math.random() * 16);
-    const deals = await this.getDeals(15);
+    const deals = await this.getDeals(10);
+
+    if (!deals || deals.length === 0) return null;
+
+    const randomNumber = Math.floor(Math.random() * deals.length);
     return deals[randomNumber];
   }
 
@@ -59,8 +62,17 @@ export default class ExternalServices {
     return stores;
   }
 
-  async getGameById(id) {
-    const game = await this.getData(`${this.cheapSharkURL}deals?id=${id}`);
+  async getGameById(id, giveaway = false) {
+    let game;
+    if (!giveaway) {
+      game = await this.getData(`${this.cheapSharkURL}deals?id=${id}`);
+    } else {
+      game = await this.getData(
+        `${this.gamerPowerURL}giveaway?id=${id}`,
+        this.options,
+      );
+    }
+
     return game;
   }
 }

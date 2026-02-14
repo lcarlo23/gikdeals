@@ -32,7 +32,8 @@ export default class Game {
     if (search) this.price = `$${this.data.cheapest}`;
     card.classList.add("card");
     card.dataset.id = this.id;
-    card.dataset.deal = this.deal;
+
+    if (this.deal) card.dataset.deal = this.deal;
 
     if (this.salePrice === "$0.00" || this.salePrice === "") {
       card.classList.add("free");

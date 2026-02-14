@@ -23,11 +23,17 @@ export default class RenderManager {
 
     parentElement.addEventListener("click", (e) => {
       const card = e.target.closest(".card");
+      if (!card) return;
 
-      if (card) {
-        const id = card.dataset.deal;
+      let id;
+
+      if (card.dataset.deal) {
+        id = card.dataset.deal;
 
         this.renderModal(id);
+      } else if (card) {
+        id = card.dataset.id;
+        this.renderModal(id, true);
       }
     });
   }
@@ -44,45 +50,91 @@ export default class RenderManager {
     this.renderGameList(list, container, 999, 0, true);
   }
 
-  async renderModal(id) {
-    const template = await loadTemplate("/templates/modal.html");
+  async renderModal(id, giveaway = false) {
+    let template = giveaway
+      ? await loadTemplate("/templates/modal-giveaway.html")
+      : await loadTemplate("/templates/modal.html");
     const modal = document.createElement("dialog");
     const body = document.querySelector("body");
 
     modal.classList.add("modal");
 
-    const game = await this.api.getGameById(id);
+    let game;
+    let storeData;
+    let image;
+    let title;
+    let releaseDate;
+    let sale;
+    let price;
+    let storePage;
 
     const storeList = await this.api.getStoresList();
-    const storeData = storeList.find(
-      (store) => store.storeID === game.gameInfo.storeID,
-    );
-    const store = new Store(storeData);
 
-    const info = game.gameInfo;
-    const releaseDate = new Date(info.releaseDate * 1000).toLocaleDateString();
-    const storePage = `https://www.cheapshark.com/redirect?dealID=${id}`;
+    if (!giveaway) {
+      game = await this.api.getGameById(id);
+      game = game.gameInfo;
 
-    const modalContent = template
-      .replace("{{img-bg}}", info.thumb)
-      .replace("{{cover}}", info.thumb)
-      .replace("{{title}}", info.name)
+      storeData = storeList.find((store) => store.storeID === game.storeID);
+
+      image = game.thumb;
+      title = game.name;
+
+      releaseDate = new Date(game.releaseDate * 1000).toLocaleDateString();
+
+      sale = game.salePrice;
+      price = game.retailPrice;
+
+      storePage = `https://www.cheapshark.com/redirect?dealID=${id}`;
+    } else {
+      game = await this.api.getGameById(id, true);
+
+      storeData = storeList.find((store) =>
+        game.platforms.toLowerCase().includes(store.storeName.toLowerCase()),
+      );
+
+      image = game.image;
+      title = game.title;
+
+      releaseDate = new Date(game.published_date).toLocaleDateString();
+
+      price = game.worth;
+
+      storePage = game.open_giveaway_url;
+    }
+
+    let store;
+
+    if (storeData) store = new Store(storeData);
+
+    let modalContent = template
+      .replace("{{img-bg}}", image)
+      .replace("{{cover}}", image)
+      .replace("{{title}}", title)
       .replace("{{releaseDate}}", releaseDate)
-      .replace(
-        "{{steamRatingText}}",
-        info.steamRatingText?.toUpperCase() || "No ratings",
-      )
-      .replace("{{steamRatingPercent}}", info.steamRatingPercent)
-      .replace(
-        "{{steamRatingCount}}",
-        Number(info.steamRatingCount).toLocaleString(),
-      )
-      .replace("{{metacriticScore}}", info.metacriticScore)
-      .replace("{{storeName}}", store.getName())
-      .replace("{{platform}}", store.getLogo())
-      .replace("{{sale}}", info.salePrice)
-      .replace("{{price}}", info.retailPrice)
+      .replace("{{storeName}}", store?.getName() || "")
+      .replace("{{platform}}", store?.getLogo() || "")
+      .replace("{{price}}", price)
       .replace("{{storePage}}", storePage);
+
+    if (!giveaway) {
+      modalContent = modalContent
+        .replace(
+          "{{steamRatingText}}",
+          game.steamRatingText?.toUpperCase() || "No ratings",
+        )
+        .replace("{{steamRatingPercent}}", game.steamRatingPercent)
+        .replace(
+          "{{steamRatingCount}}",
+          Number(game.steamRatingCount).toLocaleString(),
+        )
+        .replace("{{metacriticScore}}", game.metacriticScore)
+        .replace("{{sale}}", sale);
+    } else {
+      modalContent = modalContent.replace(
+        "{{instructions}}",
+        game.instructions,
+      );
+    }
 
     modal.innerHTML = modalContent;
 
