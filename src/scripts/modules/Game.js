@@ -57,10 +57,13 @@ export default class Game {
 
     const template = await loadTemplate("/templates/hero.html");
     const card = document.createElement("div");
+
     card.classList.add("hero-card");
     if (this.salePrice === "0.00" || this.salePrice === "") {
       card.classList.add("free");
     }
+
+    const storePage = `https://www.cheapshark.com/redirect?dealID=${this.deal}`;
 
     this.store = await this.setStore();
 
@@ -69,6 +72,7 @@ export default class Game {
       .replace("{{cover}}", this.image)
       .replace("{{title}}", this.title)
       .replace("{{platform}}", this.store)
+      .replace("{{storePage}}", storePage)
       .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price);
 

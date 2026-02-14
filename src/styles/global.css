@@ -118,7 +118,8 @@ a {
 }
 
 button,
-dialog a {
+dialog a,
+#hero a {
   border: none;
   background: var(--bg-button);
   font-size: 1.5rem;
