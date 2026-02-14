@@ -41,7 +41,7 @@ export default class RenderManager {
         fav.classList.toggle("is-active");
 
         const favoriteContainer = document.getElementById("fav-list");
-        this.renderFavorites(favoriteContainer, true);
+        if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
         return;
       }
 

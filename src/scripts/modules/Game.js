@@ -24,7 +24,8 @@ export default class Game {
     this.price = this.data.normalPrice
       ? `$${this.data.normalPrice}`
       : this.data.worth || "";
-    this.id = this.data.dealID || this.data.id || "";
+    this.id =
+      this.data.dealID || this.data.id || this.data.cheapestDealID || "";
   }
 
   async createCard(parentElement, HTMLtemplate, search = false) {
@@ -33,6 +34,7 @@ export default class Game {
 
     if (!search) this.store = (await this.setStore()) || "";
     if (search) this.price = `$${this.data.cheapest}`;
+
     card.classList.add("card");
     card.dataset.id = this.id;
 
