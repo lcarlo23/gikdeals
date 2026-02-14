@@ -1,7 +1,7 @@
 import "/styles/main.css";
 
 import RenderManager from "./modules/RenderManager";
-import { loadHeaderFooter } from "./utils";
+import { loadHeaderFooter } from "./modules/utils";
 
 loadHeaderFooter();
 

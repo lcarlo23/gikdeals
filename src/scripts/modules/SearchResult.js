@@ -1,4 +1,4 @@
-import { loadTemplate } from "../utils";
+import { loadTemplate } from "./utils";
 import ExternalServices from "./ExternalServices";
 
 export default class SearchResult {

@@ -64,6 +64,7 @@ export default class ExternalServices {
 
   async getGameById(id, giveaway = false) {
     let game;
+
     if (!giveaway) {
       game = await this.getData(`${this.cheapSharkURL}deals?id=${id}`);
     } else {

@@ -1,11 +1,15 @@
-import { loadTemplate } from "../utils";
+import { loadTemplate } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Store from "./Store";
+import FavoritesManager from "./FavoritesManager";
+
+const api = new ExternalServices();
+const favMan = new FavoritesManager();
 
 export default class Game {
   constructor(data) {
     this.data = data;
-    this.api = new ExternalServices();
+    this.isFavorite = favMan.isFavorite(data);
 
     this.image =
       this.data.image || this.data.thumb || this.data.thumbnail || "";
@@ -50,9 +54,12 @@ export default class Game {
     card.innerHTML = cardContent;
 
     parentElement.appendChild(card);
+
+    const fav = document.querySelector(`[data-id="${this.id}"] .favorite-icon`);
+    if (this.isFavorite) fav.classList.add("is-active");
   }
 
-  async createHero(parentElement) {
+  async createHero(parentElement, renMan) {
     parentElement.replaceChildren();
 
     const template = await loadTemplate("/templates/hero.html");
@@ -79,25 +86,30 @@ export default class Game {
     card.innerHTML = cardContent;
     parentElement.appendChild(card);
 
+    const favorite = document.querySelector("#hero .favorite-icon");
+
+    if (this.isFavorite) favorite.classList.add("is-active");
+
+    favorite.addEventListener("click", () => {
+      favMan.toggleFavorites(this.data);
+      favorite.classList.toggle("is-active");
+
+      const favoriteContainer = document.getElementById("fav-list");
+      renMan.renderFavorites(favoriteContainer, true);
+    });
+
     const shuffleBtn = document.querySelector(".shuffle-button");
 
     shuffleBtn.addEventListener("click", async () => {
-      const newDeal = await this.api.getRandomDeal();
-      let newHero = new Game(newDeal);
+      const newGame = await api.getRandomDeal();
+      let newHero = new Game(newGame);
 
-      newHero.createHero(parentElement);
+      newHero.createHero(parentElement, renMan);
     });
   }
 
-  // getDiscount() {
-  //   const discount = Math.round(
-  //     ((this.price - this.salePrice) / this.price) * 100,
-  //   );
-  //   return `${discount}% OFF`;
-  // }
-
   async setStore() {
-    const storeList = await this.api.getStoresList();
+    const storeList = await api.getStoresList();
 
     const storeData = this.data.platforms
       ? storeList.find((store) =>

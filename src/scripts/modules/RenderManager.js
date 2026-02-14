@@ -1,11 +1,13 @@
-import { loadTemplate } from "../utils";
+import { loadTemplate } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Game from "./Game";
 import Store from "./Store";
+import FavoritesManager from "./FavoritesManager";
 
 export default class RenderManager {
   constructor() {
     this.api = new ExternalServices();
+    this.favMan = new FavoritesManager();
   }
 
   renderGameList(list, parentElement, end = 999, start = 0, search = false) {
@@ -21,20 +23,29 @@ export default class RenderManager {
           );
     });
 
-    parentElement.addEventListener("click", (e) => {
+    parentElement.addEventListener("click", async (e) => {
       const card = e.target.closest(".card");
-      if (!card) return;
+      const fav = e.target.closest(".favorite-icon");
 
-      let id;
-
-      if (card.dataset.deal) {
-        id = card.dataset.deal;
-
-        this.renderModal(id);
-      } else if (card) {
-        id = card.dataset.id;
-        this.renderModal(id, true);
+      if (!card && !fav) {
+        return;
       }
+
+      const id = card.dataset.id || card.dataset.deal;
+
+      if (fav) {
+        const game = await this.api.getGameById(id, !card.dataset.deal);
+
+        this.favMan.toggleFavorites(game);
+
+        fav.classList.toggle("is-active");
+
+        const favoriteContainer = document.getElementById("fav-list");
+        this.renderFavorites(favoriteContainer, true);
+        return;
+      }
+
+      this.renderModal(id, !card.hasAttribute("data-deal"));
     });
   }
 
@@ -145,5 +156,33 @@ export default class RenderManager {
     body.appendChild(modal);
 
     modal.showModal();
+  }
+
+  renderFavorites(parentElement, list = false) {
+    parentElement.innerHTML = "";
+
+    const favMan = new FavoritesManager();
+    const favorites = favMan.getFavorites();
+
+    if (favorites.length === 0) {
+      parentElement.innerHTML = `<p class="no-fav">NO FAVORITES YET<br>You can add/remove a game from this list by clicking on the star icon</p>`;
+      return;
+    }
+
+    if (list) {
+      const favList = favorites.slice(-5).toReversed();
+
+      favList.forEach((fav) => {
+        const card = document.createElement("div");
+        card.classList.add("card-list");
+
+        card.innerHTML = `
+          <img src="${fav.thumb || fav.gameInfo?.thumb || fav.thumbnail}" width="80" height="80" />
+          <p class="fav-title">${fav.title || fav.name || fav.gameInfo.name}</p>
+        `;
+
+        parentElement.appendChild(card);
+      });
+    }
   }
 }
