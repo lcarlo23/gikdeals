@@ -10,10 +10,8 @@ loadHeaderFooter();
 document.addEventListener("DOMContentLoaded", async () => {
   const heroContainer = document.getElementById("hero");
   const favoriteContainer = document.getElementById("fav-list");
-  const dealsContainer = document.querySelector("#best-deals .cards-container");
-  const giveawaysContainer = document.querySelector(
-    "#latest-giveaways .cards-container",
-  );
+  const dealsContainer = document.querySelector("#best-deals");
+  const giveawaysContainer = document.querySelector("#latest-giveaways");
 
   const api = new ExternalServices();
   const renMan = new RenderManager();
@@ -27,6 +25,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   hero.createHero(heroContainer, renMan);
 
   renMan.renderFavorites(favoriteContainer, true);
+  renMan.renderListEvents(giveaways, giveawaysContainer, 4);
   renMan.renderGameList(giveaways, giveawaysContainer, 4);
+  renMan.renderListEvents(deals, dealsContainer, 8);
   renMan.renderGameList(deals, dealsContainer, 8);
 });

@@ -28,7 +28,7 @@ export default class Game {
       this.data.dealID || this.data.id || this.data.cheapestDealID || "";
   }
 
-  async createCard(parentElement, HTMLtemplate, search = false) {
+  async createCard(HTMLtemplate, search = false) {
     const template = await loadTemplate(HTMLtemplate);
     const card = document.createElement("div");
 
@@ -52,10 +52,7 @@ export default class Game {
 
     card.innerHTML = cardContent;
 
-    parentElement.appendChild(card);
-
-    const fav = document.querySelector(`[data-id="${this.id}"] .favorite-btn`);
-    if (this.isFavorite) fav.classList.add("is-active");
+    return card;
   }
 
   async createHero(parentElement, renMan) {

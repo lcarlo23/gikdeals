@@ -10,47 +10,122 @@ export default class RenderManager {
     this.favMan = new FavoritesManager();
   }
 
-  renderGameList(list, parentElement, end = 999, start = 0, search = false) {
-    list.slice(start, start + end).forEach((item) => {
-      const game = new Game(item);
-
-      !search
-        ? game.createCard(parentElement, "/templates/card.html")
-        : game.createCard(
-            parentElement,
-            "/templates/search-card.html",
-            (search = true),
-          );
-    });
-
-    parentElement.addEventListener("click", async (e) => {
+  renderListEvents(list, parentElement, end = 999, start = 0, search = false) {
+    parentElement.addEventListener("click", (e) => {
+      const target = e.target;
+      const sort = target.closest(".sort");
+      const filter = target.closest(".filter");
+      const sortPanel = parentElement.querySelector(".sort-panel");
+      const filterPanel = parentElement.querySelector(".filter-panel");
+      const sortData = target.closest("[data-sort]");
+      const filterData = target.closest("[data-filter]");
       const card = e.target.closest(".card");
       const fav = e.target.closest(".favorite-btn");
-
-      if (!card && !fav) {
-        return;
-      }
-
-      const id = card.dataset.id;
+      const id = card?.dataset.id;
 
       if (fav) {
         this.updateFavorites(id, e.target);
         return;
       }
 
-      this.renderModal(id, !isNaN(Number(id)));
+      if (card) this.renderModal(id, !isNaN(Number(id)));
+
+      if (sort) {
+        sortPanel.classList.toggle("is-active");
+      }
+      if (filter) {
+        filterPanel.classList.toggle("is-active");
+      }
+
+      if (sortData) {
+        const btn = sortData.dataset.sort;
+        let newList;
+
+        if (btn === "name-asc") {
+          newList = list.toSorted((a, b) => {
+            const aTitle = a.title.trim().toLowerCase();
+            const bTitle = b.title.trim().toLowerCase();
+
+            return aTitle.localeCompare(bTitle);
+          });
+        }
+
+        if (btn === "name-desc") {
+          newList = list.toSorted((a, b) => {
+            const aTitle = a.title.trim().toLowerCase();
+            const bTitle = b.title.trim().toLowerCase();
+
+            return bTitle.localeCompare(aTitle);
+          });
+        }
+
+        if (btn === "lower") {
+          newList = list.toSorted((a, b) => {
+            const aPrice = parseFloat(a.salePrice || a.price);
+            const bPrice = parseFloat(b.salePrice || b.price);
+
+            return aPrice - bPrice;
+          });
+        }
+
+        if (btn === "higher") {
+          newList = list.toSorted((a, b) => {
+            const aPrice = parseFloat(a.salePrice || a.price);
+            const bPrice = parseFloat(b.salePrice || b.price);
+
+            return bPrice - aPrice;
+          });
+        }
+
+        if (btn === "store")
+          this.renderGameList(newList, parentElement, end, start, search);
+
+        sortPanel.classList.remove("is-active");
+        filterPanel.classList.remove("is-active");
+      }
     });
+  }
+
+  async renderGameList(
+    list,
+    parentElement,
+    end = 999,
+    start = 0,
+    search = false,
+  ) {
+    const container = parentElement.querySelector(".cards-container");
+
+    container.replaceChildren();
+
+    const template = "/templates/card.html";
+    const searchTemplate = "/templates/search-card.html";
+
+    for (const item of list.slice(start, start + end)) {
+      const game = new Game(item);
+
+      const card = !search
+        ? await game.createCard(template)
+        : await game.createCard(searchTemplate, true);
+
+      container.appendChild(card);
+
+      const fav = document.querySelector(
+        `[data-id="${this.id}"] .favorite-btn`,
+      );
+      if (this.isFavorite) fav.classList.add("is-active");
+    }
   }
 
   async renderSearch() {
     const params = new URLSearchParams(window.location.search);
     const term = params.get("term").replace("+", " ").toUpperCase();
     const title = document.getElementById("page-title");
-    const container = document.querySelector(".cards-container");
+    const container = document.getElementById("deals");
     const list = await this.api.searchDeals(term);
 
     title.textContent = term;
 
+    this.renderListEvents(list, container, 999, 0, true);
     this.renderGameList(list, container, 999, 0, true);
   }
 
