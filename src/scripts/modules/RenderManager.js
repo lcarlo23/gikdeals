@@ -214,7 +214,7 @@ export default class RenderManager {
     const isCard = target.closest(".card");
     const isHero = target.closest(".hero-card");
 
-    if (!isCard) card.classList.toggle("is-active");
+    if (card && !isCard) card.classList.toggle("is-active");
     if (hero && !isHero) hero.classList.toggle("is-active");
 
     const favoriteContainer = document.getElementById("fav-list");
