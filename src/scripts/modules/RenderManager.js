@@ -157,6 +157,12 @@ export default class RenderManager {
     body.appendChild(modal);
 
     modal.showModal();
+
+    const closeBtn = document.querySelector(".close-btn");
+
+    closeBtn.addEventListener("click", () => {
+      modal.remove();
+    });
   }
 
   renderFavorites(parentElement, list = false) {

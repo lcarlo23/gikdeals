@@ -102,6 +102,17 @@ dialog.modal {
       }
     }
   }
+
+  .close-btn {
+    background: rgba(0, 0, 0, 0.75);
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+  }
 }
 
 @keyframes blur {
