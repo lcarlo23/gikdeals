@@ -54,7 +54,7 @@ export default class Game {
 
     parentElement.appendChild(card);
 
-    const fav = document.querySelector(`[data-id="${this.id}"] .favorite-icon`);
+    const fav = document.querySelector(`[data-id="${this.id}"] .favorite-btn`);
     if (this.isFavorite) fav.classList.add("is-active");
   }
 
@@ -83,17 +83,18 @@ export default class Game {
       .replace("{{price}}", this.price);
 
     card.innerHTML = cardContent;
+    card.dataset.id = this.id;
+
     parentElement.appendChild(card);
 
-    const favorite = document.querySelector("#hero .favorite-icon");
+    const favorite = document.querySelector("#hero .favorite-btn");
 
     if (this.isFavorite) favorite.classList.add("is-active");
 
-    favorite.addEventListener("click", () => {
-      favMan.toggleFavorites(this.data);
-      favorite.classList.toggle("is-active");
-
+    favorite.addEventListener("click", (e) => {
       const favoriteContainer = document.getElementById("fav-list");
+
+      renMan.updateFavorites(this.id, e.target);
       renMan.renderFavorites(favoriteContainer, true);
     });
 

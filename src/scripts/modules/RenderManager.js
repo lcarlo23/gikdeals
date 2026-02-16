@@ -25,7 +25,7 @@ export default class RenderManager {
 
     parentElement.addEventListener("click", async (e) => {
       const card = e.target.closest(".card");
-      const fav = e.target.closest(".favorite-icon");
+      const fav = e.target.closest(".favorite-btn");
 
       if (!card && !fav) {
         return;
@@ -34,14 +34,7 @@ export default class RenderManager {
       const id = card.dataset.id;
 
       if (fav) {
-        const game = await this.api.getGameById(id, !isNaN(Number(id)));
-
-        this.favMan.toggleFavorites(game);
-
-        fav.classList.toggle("is-active");
-
-        const favoriteContainer = document.getElementById("fav-list");
-        if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
+        this.updateFavorites(id, e.target);
         return;
       }
 
@@ -70,6 +63,7 @@ export default class RenderManager {
     const body = document.querySelector("body");
 
     modal.classList.add("modal");
+    modal.dataset.id = id;
 
     let game;
     let storeData;
@@ -150,18 +144,32 @@ export default class RenderManager {
 
     modal.innerHTML = modalContent;
 
-    modal.addEventListener("close", () => {
-      modal.remove();
-    });
-
     body.appendChild(modal);
 
     modal.showModal();
 
-    const closeBtn = document.querySelector(".close-btn");
+    const favMan = new FavoritesManager();
+    const favBtn = document.querySelector(
+      `dialog[data-id="${id}"] .favorite-btn`,
+    );
+    const isFavorite = favMan.isFavorite(game);
+    if (isFavorite) favBtn.classList.add("is-active");
 
-    closeBtn.addEventListener("click", () => {
+    modal.addEventListener("close", () => {
       modal.remove();
+    });
+
+    modal.addEventListener("click", async (e) => {
+      const isFavBtn = e.target.closest(".favorite-btn");
+      const closeBtn = e.target.closest(".close-btn");
+
+      if (isFavBtn) {
+        const id = modal.dataset.id;
+        this.updateFavorites(id, e.target);
+        return;
+      }
+
+      if (closeBtn) modal.remove();
     });
   }
 
@@ -191,5 +199,25 @@ export default class RenderManager {
         parentElement.appendChild(card);
       });
     }
+  }
+
+  async updateFavorites(id, target) {
+    const game = await this.api.getGameById(id, !isNaN(Number(id)));
+    const card = document.querySelector(`.card[data-id="${id}"] .favorite-btn`);
+    const hero = document.querySelector(
+      `.hero-card[data-id="${id}"] .favorite-btn`,
+    );
+
+    this.favMan.toggleFavorites(game);
+
+    target.classList.toggle("is-active");
+    const isCard = target.closest(".card");
+    const isHero = target.closest(".hero-card");
+
+    if (!isCard) card.classList.toggle("is-active");
+    if (hero && !isHero) hero.classList.toggle("is-active");
+
+    const favoriteContainer = document.getElementById("fav-list");
+    if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
   }
 }

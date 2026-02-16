@@ -144,7 +144,7 @@ footer {
   font-size: 0.75rem;
 }
 
-.favorite-icon,
+.favorite-btn,
 .close-btn {
   background: rgba(0, 0, 0, 0.75);
   width: 3rem;
@@ -158,7 +158,7 @@ footer {
   background-position: center;
 }
 
-.favorite-icon {
+.favorite-btn {
   left: 1rem;
   background-image: url("/images/star.svg");
 
@@ -173,7 +173,7 @@ footer {
 
 /* #hero,
 .modal {
-  .favorite-icon {
+  .favorite-btn {
     width: 2.5rem;
     height: 2.5rem;
     top: 1.5rem;
