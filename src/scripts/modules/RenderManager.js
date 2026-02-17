@@ -172,6 +172,7 @@ export default class RenderManager {
     let image;
     let title;
     let releaseDate;
+    let endDate;
     let sale;
     let price;
     let storePage;
@@ -204,6 +205,7 @@ export default class RenderManager {
       title = game.title;
 
       releaseDate = new Date(game.published_date).toLocaleDateString();
+      endDate = new Date(game.end_date).toLocaleDateString();
 
       price = game.worth;
 
@@ -219,6 +221,7 @@ export default class RenderManager {
       .replace("{{cover}}", image)
       .replace("{{title}}", title)
       .replace("{{releaseDate}}", releaseDate)
+      .replace("{{endDate}}", endDate)
       .replace("{{storeName}}", store?.getName() || "")
       .replace("{{platform}}", store?.getLogo() || "")
       .replace("{{price}}", price)
