@@ -314,6 +314,7 @@ export default class RenderManager {
     this.favMan.toggleFavorites(game.gameInfo);
 
     target.classList.toggle("is-active");
+
     const isCard = target.closest(".card");
     const isHero = target.closest(".hero-card");
 
@@ -322,6 +323,8 @@ export default class RenderManager {
 
     const favoriteContainer = document.getElementById("fav-list");
     if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
+
+    this.renderGameList();
   }
 
   async applyFilterSort() {
