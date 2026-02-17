@@ -34,22 +34,15 @@ export default class ExternalServices {
     return giveaways;
   }
 
-  async getDeals(limit = 60) {
+  async getDeals(limit = 60, urlParams = "", onSale = 1, lowerPrice = "0.01") {
     const deals = await this.getData(
-      `${this.cheapSharkURL}deals?pageSize=${limit}&lowerPrice=0.01`,
-    );
-    return deals;
-  }
-
-  async searchDeals(term) {
-    const deals = await this.getData(
-      `${this.cheapSharkURL}games?title=${term}`,
+      `${this.cheapSharkURL}deals?pageSize=${limit}&lowerPrice=${lowerPrice}${urlParams}&onSale=${onSale}`,
     );
     return deals;
   }
 
   async getRandomDeal() {
-    const deals = await this.getDeals(10);
+    const deals = await this.getDeals(20);
 
     if (!deals || deals.length === 0) return null;
 

@@ -5,7 +5,13 @@ import Store from "./Store";
 import FavoritesManager from "./FavoritesManager";
 
 export default class RenderManager {
-  constructor(list, storeList, parentElement) {
+  constructor(
+    list,
+    storeList,
+    parentElement,
+    isDeal = false,
+    isSearch = false,
+  ) {
     this.list = list;
     this.storeList = storeList;
     this.parent = parentElement;
@@ -18,72 +24,62 @@ export default class RenderManager {
     this.originalList = list;
     this.end = 999;
     this.start = 0;
-    this.search = false;
     this.sorted = false;
+    this.store = "";
+    this.isDeal = isDeal;
+    this.isSearch = isSearch;
 
+    this.loadFilters();
     this.loadEvents();
   }
 
-  async renderGameList(
-    end = this.end,
-    start = this.start,
-    search = this.search,
-  ) {
-    this.end = end;
-    this.start = start;
-    this.search = search;
+  async loadFilters() {
+    const sortPanel = this.parent.querySelector(".sort-panel");
+    const sortTemplate = await loadTemplate(
+      this.isDeal && !this.isSearch
+        ? "/templates/sort-panel-deal.html"
+        : "/templates/sort-panel.html",
+    );
 
-    this.updateActiveFilters();
+    if (sortPanel) sortPanel.innerHTML = sortTemplate;
 
-    const container = this.parent.querySelector(".cards-container");
-    if (container) container.replaceChildren();
-
-    const template = "/templates/card.html";
-    const searchTemplate = "/templates/search-card.html";
-
-    for (const item of this.list.slice(start, start + end)) {
-      const game = new Game(item, this.storeList);
-
-      const card = !search
-        ? await game.createCard(template)
-        : await game.createCard(searchTemplate, true);
-
-      container.appendChild(card);
-
-      const fav = document.querySelector(
-        `[data-id="${this.id}"] .favorite-btn`,
-      );
-      if (this.isFavorite) fav.classList.add("is-active");
-    }
-  }
-
-  async loadEvents() {
-    const filterStore = await this.loadStoreList(this.list);
-    const filterPanel = this.parent.querySelector(".filter-div.store");
+    const filterPanel = this.parent.querySelector(".filter-panel");
+    const storeFilter = this.parent.querySelector(".filter-div.store");
 
     if (filterPanel) {
+      let filterStore = [];
+
+      if (this.isDeal && !this.isSearch) {
+        this.storeList.forEach((store) => filterStore.push(store.storeName));
+      } else {
+        filterStore = await this.loadStoreList(this.list);
+      }
       filterStore.forEach((store) => {
         if (store) {
           const btn = document.createElement("button");
           btn.dataset.filter = store;
           btn.textContent = store;
 
-          filterPanel.appendChild(btn);
+          storeFilter?.appendChild(btn);
         }
       });
     }
+  }
 
+  async loadEvents() {
     this.parent.addEventListener("click", (e) => {
       const target = e.target;
 
       const sort = target.closest(".sort");
       const filter = target.closest(".filter");
-      const sortPanel = this.parent.querySelector(".sort-panel");
-      const filterPanel = this.parent.querySelector(".filter-panel");
       const sortData = target.closest("[data-sort]");
       const filterData = target.closest("[data-filter]");
-      const card = e.target.closest(".card");
-      const fav = e.target.closest(".favorite-btn");
+      const card = target.closest(".card");
+      const fav = target.closest(".favorite-btn");
+
+      const sortPanel = this.parent.querySelector(".sort-panel");
+      const filterPanel = this.parent.querySelector(".filter-panel");
+
       const id = card?.dataset.id;
 
       if (fav) {
@@ -123,6 +119,26 @@ export default class RenderManager {
       }
     });
   }
+  async renderGameList(end = this.end, start = this.start) {
+    this.end = end;
+    this.start = start;
+
+    this.updateActiveFilters();
+
+    const container = this.parent.querySelector(".cards-container");
+    if (container) container.replaceChildren();
+
+    for (const item of this.list.slice(start, start + end)) {
+      const game = new Game(item, this.storeList);
+
+      const card = await game.createCard();
+
+      container.appendChild(card);
+
+      const fav = card.querySelector(`[data-id="${game.id}"] .favorite-btn`);
+      if (game.isFavorite && fav) fav.classList.add("is-active");
+    }
+  }
 
   async loadStoreList(list) {
     let availableStores = [];
@@ -135,19 +151,6 @@ export default class RenderManager {
       if (inList === -1) availableStores.push(store);
     });
     return availableStores;
-  }
-
-  async renderSearch() {
-    const params = new URLSearchParams(window.location.search);
-    const term = params.get("term").replace("+", " ").toUpperCase();
-    const title = document.getElementById("page-title");
-    const container = document.getElementById("deals");
-    const list = await this.api.searchDeals(term);
-
-    title.textContent = term;
-
-    this.loadEvents(list, container, 999, 0, true);
-    this.renderGameList(list, container, 999, 0, true);
   }
 
   async renderModal(id, giveaway = false) {
@@ -317,59 +320,80 @@ export default class RenderManager {
     if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
   }
 
-  applyFilterSort() {
+  async applyFilterSort() {
     this.list = [...this.originalList];
 
     if (this.storeFilter === "reset") this.storeFilter = "all";
+
     if (this.storeFilter !== "all") {
-      this.list = this.list.filter((item) => {
-        const game = new Game(item, this.storeList);
-        return game.store?.getName() === this.storeFilter;
-      });
+      if (this.isDeal && !this.isSearch) {
+        this.store = this.storeList.find(
+          (store) => store.storeName === this.storeFilter,
+        );
+        const newList = await this.api.getDeals(
+          this.end,
+          `&storeID=${this.store.storeID}`,
+        );
+        this.list = newList;
+      } else {
+        this.list = this.list.filter((item) => {
+          const game = new Game(item, this.storeList);
+          return game.store?.getName() === this.storeFilter;
+        });
+      }
     }
 
-    this.list.sort((a, b) => {
-      if (this.sort === "name-asc") {
-        const aTitle = a.title.trim().toLowerCase();
-        const bTitle = b.title.trim().toLowerCase();
+    if (this.isDeal && !this.isSearch) {
+      this.list = await this.api.getDeals(
+        this.end,
+        this.store?.storeID
+          ? `&storeID=${this.store.storeID}&sortBy=${this.sort}`
+          : `&sortBy=${this.sort}`,
+      );
+    } else if (!this.isDeal || this.isSearch) {
+      this.list.sort((a, b) => {
+        if (this.sort === "name-asc") {
+          const aTitle = a.title.trim().toLowerCase();
+          const bTitle = b.title.trim().toLowerCase();
 
-        return aTitle.localeCompare(bTitle);
-      }
-      if (this.sort === "name-desc") {
-        const aTitle = a.title.trim().toLowerCase();
-        const bTitle = b.title.trim().toLowerCase();
+          return aTitle.localeCompare(bTitle);
+        }
+        if (this.sort === "name-desc") {
+          const aTitle = a.title.trim().toLowerCase();
+          const bTitle = b.title.trim().toLowerCase();
 
-        return bTitle.localeCompare(aTitle);
-      }
-      if (this.sort === "lower") {
-        const aPrice = parseFloat(a.salePrice || a.price);
-        const bPrice = parseFloat(b.salePrice || b.price);
+          return bTitle.localeCompare(aTitle);
+        }
+        if (this.sort === "lower") {
+          const aPrice = parseFloat(a.salePrice || a.price);
+          const bPrice = parseFloat(b.salePrice || b.price);
 
-        return aPrice - bPrice;
-      }
-      if (this.sort === "higher") {
-        const aPrice = parseFloat(a.salePrice || a.price);
-        const bPrice = parseFloat(b.salePrice || b.price);
+          return aPrice - bPrice;
+        }
+        if (this.sort === "higher") {
+          const aPrice = parseFloat(a.salePrice || a.price);
+          const bPrice = parseFloat(b.salePrice || b.price);
 
-        return bPrice - aPrice;
-      }
-      if (this.sort === "ending") {
-        const aDate =
-          a.date !== "N/A" ? new Date(a.end_date).getTime() : Infinity;
-        const bDate =
-          b.date !== "N/A" ? new Date(b.end_date).getTime() : Infinity;
+          return bPrice - aPrice;
+        }
+        if (this.sort === "ending") {
+          const aDate =
+            a.date !== "N/A" ? new Date(a.end_date).getTime() : Infinity;
+          const bDate =
+            b.date !== "N/A" ? new Date(b.end_date).getTime() : Infinity;
 
-        return aDate - bDate;
-      }
-      if (this.sort === "new") {
-        this.list = [...this.originalList];
-      }
+          return aDate - bDate;
+        }
+        if (this.sort === "new") {
+          this.list = [...this.originalList];
+        }
 
-      if (this.sort === "reset") {
-        this.list = [...this.originalList];
-        this.sort = "";
-      }
-    });
+        if (this.sort === "reset") {
+          this.list = [...this.originalList];
+          this.sort = "";
+        }
+      });
+    }
 
     this.renderGameList();
   }

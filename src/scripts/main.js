@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     storeList,
     giveawaysContainer,
   );
-  const dealsRender = new RenderManager(deals, storeList, dealsContainer);
+  const dealsRender = new RenderManager(deals, storeList, dealsContainer, true);
 
   const hero = new Game(randomDeal, storeList);
   hero.createHero(heroContainer, dealsRender);

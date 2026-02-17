@@ -32,11 +32,9 @@ export default class Game {
     this.setStore();
   }
 
-  async createCard(HTMLtemplate, search = false) {
-    const template = await loadTemplate(HTMLtemplate);
+  async createCard() {
+    const template = await loadTemplate("/templates/card.html");
     const card = document.createElement("div");
-
-    if (search) this.price = `$${this.data.cheapest}`;
 
     card.classList.add("card");
     card.dataset.id = this.id;
