@@ -56,17 +56,13 @@ export default class ExternalServices {
   }
 
   async getGameById(id, giveaway = false) {
-    let game;
-
     if (!giveaway) {
-      game = await this.getData(`${this.cheapSharkURL}deals?id=${id}`);
+      return await this.getData(`${this.cheapSharkURL}deals?id=${id}`);
     } else {
-      game = await this.getData(
+      return await this.getData(
         `${this.gamerPowerURL}giveaway?id=${id}`,
         this.options,
       );
     }
-
-    return game;
   }
 }

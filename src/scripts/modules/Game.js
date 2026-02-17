@@ -17,6 +17,7 @@ export default class Game {
     this.title =
       this.data.title?.split(" (")[0] ||
       this.data.external ||
+      this.data.name ||
       "No title available";
     this.store;
 

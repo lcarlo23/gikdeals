@@ -119,6 +119,7 @@ export default class RenderManager {
       }
     });
   }
+
   async renderGameList(end = this.end, start = this.start) {
     this.end = end;
     this.start = start;
@@ -136,6 +137,7 @@ export default class RenderManager {
       container.appendChild(card);
 
       const fav = card.querySelector(`[data-id="${game.id}"] .favorite-btn`);
+      if (!this.isDeal) fav.remove();
       if (game.isFavorite && fav) fav.classList.add("is-active");
     }
   }
@@ -307,7 +309,9 @@ export default class RenderManager {
       `.hero-card[data-id="${id}"] .favorite-btn`,
     );
 
-    this.favMan.toggleFavorites(game);
+    game.gameInfo.dealID = id;
+
+    this.favMan.toggleFavorites(game.gameInfo);
 
     target.classList.toggle("is-active");
     const isCard = target.closest(".card");
