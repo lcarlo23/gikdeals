@@ -330,6 +330,7 @@ export default class RenderManager {
   }
 
   async applyFilterSort() {
+    this.parent.classList.add("is-loading");
     this.list = [...this.originalList];
 
     if (this.storeFilter === "reset") {
@@ -415,6 +416,7 @@ export default class RenderManager {
       <p class="empty-message">NO DEALS AVAILABLE FOR THE SELECTED STORE</p>
       `;
     }
+    this.parent.classList.remove("is-loading");
   }
 
   updateActiveFilters() {
