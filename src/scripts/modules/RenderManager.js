@@ -5,18 +5,81 @@ import Store from "./Store";
 import FavoritesManager from "./FavoritesManager";
 
 export default class RenderManager {
-  constructor() {
+  constructor(list, storeList, parentElement) {
+    this.list = list;
+    this.storeList = storeList;
+    this.parent = parentElement;
+
     this.api = new ExternalServices();
     this.favMan = new FavoritesManager();
+
+    this.sort = "";
+    this.storeFilter = "all";
+    this.originalList = list;
+    this.end = 999;
+    this.start = 0;
+    this.search = false;
+    this.sorted = false;
+
+    this.loadEvents();
   }
 
-  renderListEvents(list, parentElement, end = 999, start = 0, search = false) {
-    parentElement.addEventListener("click", (e) => {
+  async renderGameList(
+    end = this.end,
+    start = this.start,
+    search = this.search,
+  ) {
+    this.end = end;
+    this.start = start;
+    this.search = search;
+
+    this.updateActiveFilters();
+
+    const container = this.parent.querySelector(".cards-container");
+    if (container) container.replaceChildren();
+
+    const template = "/templates/card.html";
+    const searchTemplate = "/templates/search-card.html";
+
+    for (const item of this.list.slice(start, start + end)) {
+      const game = new Game(item, this.storeList);
+
+      const card = !search
+        ? await game.createCard(template)
+        : await game.createCard(searchTemplate, true);
+
+      container.appendChild(card);
+
+      const fav = document.querySelector(
+        `[data-id="${this.id}"] .favorite-btn`,
+      );
+      if (this.isFavorite) fav.classList.add("is-active");
+    }
+  }
+
+  async loadEvents() {
+    const filterStore = await this.loadStoreList(this.list);
+    const filterPanel = this.parent.querySelector(".filter-div.store");
+
+    if (filterPanel) {
+      filterStore.forEach((store) => {
+        if (store) {
+          const btn = document.createElement("button");
+          btn.dataset.filter = store;
+          btn.textContent = store;
+
+          filterPanel.appendChild(btn);
+        }
+      });
+    }
+
+    this.parent.addEventListener("click", (e) => {
       const target = e.target;
+
       const sort = target.closest(".sort");
       const filter = target.closest(".filter");
-      const sortPanel = parentElement.querySelector(".sort-panel");
-      const filterPanel = parentElement.querySelector(".filter-panel");
+      const sortPanel = this.parent.querySelector(".sort-panel");
+      const filterPanel = this.parent.querySelector(".filter-panel");
       const sortData = target.closest("[data-sort]");
       const filterData = target.closest("[data-filter]");
       const card = e.target.closest(".card");
@@ -32,88 +95,46 @@ export default class RenderManager {
 
       if (sort) {
         sortPanel.classList.toggle("is-active");
-      }
-      if (filter) {
+        filterPanel.classList.remove("is-active");
+      } else if (filter) {
         filterPanel.classList.toggle("is-active");
+        sortPanel.classList.remove("is-active");
+      } else {
+        sortPanel.classList.remove("is-active");
+        filterPanel.classList.remove("is-active");
       }
 
       if (sortData) {
         const btn = sortData.dataset.sort;
-        let newList;
 
-        if (btn === "name-asc") {
-          newList = list.toSorted((a, b) => {
-            const aTitle = a.title.trim().toLowerCase();
-            const bTitle = b.title.trim().toLowerCase();
-
-            return aTitle.localeCompare(bTitle);
-          });
-        }
-
-        if (btn === "name-desc") {
-          newList = list.toSorted((a, b) => {
-            const aTitle = a.title.trim().toLowerCase();
-            const bTitle = b.title.trim().toLowerCase();
-
-            return bTitle.localeCompare(aTitle);
-          });
-        }
-
-        if (btn === "lower") {
-          newList = list.toSorted((a, b) => {
-            const aPrice = parseFloat(a.salePrice || a.price);
-            const bPrice = parseFloat(b.salePrice || b.price);
-
-            return aPrice - bPrice;
-          });
-        }
-
-        if (btn === "higher") {
-          newList = list.toSorted((a, b) => {
-            const aPrice = parseFloat(a.salePrice || a.price);
-            const bPrice = parseFloat(b.salePrice || b.price);
-
-            return bPrice - aPrice;
-          });
-        }
-
-        if (btn === "store")
-          this.renderGameList(newList, parentElement, end, start, search);
+        this.sort = btn;
 
         sortPanel.classList.remove("is-active");
+        this.applyFilterSort();
+      }
+
+      if (filterData) {
+        const btn = filterData.dataset.filter;
+
+        this.storeFilter = btn;
+
         filterPanel.classList.remove("is-active");
+        this.applyFilterSort();
       }
     });
   }
 
-  async renderGameList(
-    list,
-    parentElement,
-    end = 999,
-    start = 0,
-    search = false,
-  ) {
-    const container = parentElement.querySelector(".cards-container");
+  async loadStoreList(list) {
+    let availableStores = [];
 
-    container.replaceChildren();
+    list.forEach((item) => {
+      const game = new Game(item, this.storeList);
+      const store = game.store?.getName() || "";
 
-    const template = "/templates/card.html";
-    const searchTemplate = "/templates/search-card.html";
-
-    for (const item of list.slice(start, start + end)) {
-      const game = new Game(item);
-
-      const card = !search
-        ? await game.createCard(template)
-        : await game.createCard(searchTemplate, true);
-
-      container.appendChild(card);
-
-      const fav = document.querySelector(
-        `[data-id="${this.id}"] .favorite-btn`,
-      );
-      if (this.isFavorite) fav.classList.add("is-active");
-    }
+      const inList = availableStores.findIndex((item) => item === store);
+      if (inList === -1) availableStores.push(store);
+    });
+    return availableStores;
   }
 
   async renderSearch() {
@@ -125,7 +146,7 @@ export default class RenderManager {
 
     title.textContent = term;
 
-    this.renderListEvents(list, container, 999, 0, true);
+    this.loadEvents(list, container, 999, 0, true);
     this.renderGameList(list, container, 999, 0, true);
   }
 
@@ -149,13 +170,13 @@ export default class RenderManager {
     let price;
     let storePage;
 
-    const storeList = await this.api.getStoresList();
-
     if (!giveaway) {
       game = await this.api.getGameById(id);
       game = game.gameInfo;
 
-      storeData = storeList.find((store) => store.storeID === game.storeID);
+      storeData = this.storeList.find(
+        (store) => store.storeID === game.storeID,
+      );
 
       image = game.thumb;
       title = game.name;
@@ -169,7 +190,7 @@ export default class RenderManager {
     } else {
       game = await this.api.getGameById(id, true);
 
-      storeData = storeList.find((store) =>
+      storeData = this.storeList.find((store) =>
         game.platforms.toLowerCase().includes(store.storeName.toLowerCase()),
       );
 
@@ -248,14 +269,14 @@ export default class RenderManager {
     });
   }
 
-  renderFavorites(parentElement, list = false) {
-    parentElement.innerHTML = "";
+  renderFavorites(element = this.parent, list = false) {
+    element.innerHTML = "";
 
     const favMan = new FavoritesManager();
     const favorites = favMan.getFavorites();
 
     if (favorites.length === 0) {
-      parentElement.innerHTML = `<p class="no-fav">NO FAVORITES YET<br>You can add/remove a game from this list by clicking on the star icon</p>`;
+      element.innerHTML = `<p class="no-fav">NO FAVORITES YET<br>You can add/remove a game from this list by clicking on the star icon</p>`;
       return;
     }
 
@@ -271,7 +292,7 @@ export default class RenderManager {
           <p class="fav-title">${fav.title || fav.name || fav.gameInfo.name}</p>
         `;
 
-        parentElement.appendChild(card);
+        element.appendChild(card);
       });
     }
   }
@@ -294,5 +315,77 @@ export default class RenderManager {
 
     const favoriteContainer = document.getElementById("fav-list");
     if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
+  }
+
+  applyFilterSort() {
+    this.list = [...this.originalList];
+
+    if (this.storeFilter === "reset") this.storeFilter = "all";
+    if (this.storeFilter !== "all") {
+      this.list = this.list.filter((item) => {
+        const game = new Game(item, this.storeList);
+        return game.store?.getName() === this.storeFilter;
+      });
+    }
+
+    this.list.sort((a, b) => {
+      if (this.sort === "name-asc") {
+        const aTitle = a.title.trim().toLowerCase();
+        const bTitle = b.title.trim().toLowerCase();
+
+        return aTitle.localeCompare(bTitle);
+      }
+      if (this.sort === "name-desc") {
+        const aTitle = a.title.trim().toLowerCase();
+        const bTitle = b.title.trim().toLowerCase();
+
+        return bTitle.localeCompare(aTitle);
+      }
+      if (this.sort === "lower") {
+        const aPrice = parseFloat(a.salePrice || a.price);
+        const bPrice = parseFloat(b.salePrice || b.price);
+
+        return aPrice - bPrice;
+      }
+      if (this.sort === "higher") {
+        const aPrice = parseFloat(a.salePrice || a.price);
+        const bPrice = parseFloat(b.salePrice || b.price);
+
+        return bPrice - aPrice;
+      }
+      if (this.sort === "ending") {
+        const aDate =
+          a.date !== "N/A" ? new Date(a.end_date).getTime() : Infinity;
+        const bDate =
+          b.date !== "N/A" ? new Date(b.end_date).getTime() : Infinity;
+
+        return aDate - bDate;
+      }
+      if (this.sort === "new") {
+        this.list = [...this.originalList];
+      }
+
+      if (this.sort === "reset") {
+        this.list = [...this.originalList];
+        this.sort = "";
+      }
+    });
+
+    this.renderGameList();
+  }
+
+  updateActiveFilters() {
+    const sortBtns = this.parent.querySelectorAll("[data-sort]");
+    const filterBtns = this.parent.querySelectorAll("[data-filter]");
+
+    sortBtns.forEach((btn) =>
+      btn.classList.toggle("is-active", btn.dataset.sort === this.sort),
+    );
+    filterBtns.forEach((btn) =>
+      btn.classList.toggle(
+        "is-active",
+        btn.dataset.filter === this.storeFilter,
+      ),
+    );
   }
 }

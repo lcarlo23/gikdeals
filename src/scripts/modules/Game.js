@@ -7,8 +7,9 @@ const api = new ExternalServices();
 const favMan = new FavoritesManager();
 
 export default class Game {
-  constructor(data) {
+  constructor(data, storeList) {
     this.data = data;
+    this.storeList = storeList;
     this.isFavorite = favMan.isFavorite(data);
 
     this.image =
@@ -26,13 +27,15 @@ export default class Game {
       : this.data.worth || "";
     this.id =
       this.data.dealID || this.data.id || this.data.cheapestDealID || "";
+    this.date = this.data.end_date || "";
+
+    this.setStore();
   }
 
   async createCard(HTMLtemplate, search = false) {
     const template = await loadTemplate(HTMLtemplate);
     const card = document.createElement("div");
 
-    if (!search) this.store = (await this.setStore()) || "";
     if (search) this.price = `$${this.data.cheapest}`;
 
     card.classList.add("card");
@@ -46,7 +49,7 @@ export default class Game {
       .replace("{{img-bg}}", this.image)
       .replace("{{cover}}", this.image)
       .replace("{{title}}", this.title)
-      .replace("{{platform}}", this.store)
+      .replace("{{platform}}", this.store?.getLogo() || "")
       .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price);
 
@@ -68,13 +71,13 @@ export default class Game {
 
     const storePage = `https://www.cheapshark.com/redirect?dealID=${this.id}`;
 
-    this.store = await this.setStore();
+    await this.setStore();
 
     const cardContent = template
       .replace("{{img-bg}}", this.image)
       .replace("{{cover}}", this.image)
       .replace("{{title}}", this.title)
-      .replace("{{platform}}", this.store)
+      .replace("{{platform}}", this.store?.getLogo())
       .replace("{{storePage}}", storePage)
       .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price);
@@ -99,26 +102,23 @@ export default class Game {
 
     shuffleBtn.addEventListener("click", async () => {
       const newGame = await api.getRandomDeal();
-      let newHero = new Game(newGame);
+      let newHero = new Game(newGame, this.storeList);
 
       newHero.createHero(parentElement, renMan);
     });
   }
 
-  async setStore() {
-    const storeList = await api.getStoresList();
-
+  setStore() {
     const storeData = this.data.platforms
-      ? storeList.find((store) =>
+      ? this.storeList.find((store) =>
           this.data.platforms
             .toLowerCase()
-            .includes(store.storeName.toLowerCase()),
+            .includes(store.storeName?.toLowerCase()),
         )
-      : storeList.find((store) => store.storeID === this.data.storeID);
+      : this.storeList.find((store) => store.storeID === this.data.storeID);
 
     if (!storeData) return;
 
-    const store = new Store(storeData);
-    return store.getLogo();
+    this.store = new Store(storeData);
   }
 }

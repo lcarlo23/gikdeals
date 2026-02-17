@@ -14,19 +14,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   const giveawaysContainer = document.querySelector("#latest-giveaways");
 
   const api = new ExternalServices();
-  const renMan = new RenderManager();
 
   const randomDeal = await api.getRandomDeal();
   const giveaways = await api.getGiveaways();
   const deals = await api.getDeals();
+  const storeList = await api.getStoresList();
 
-  const hero = new Game(randomDeal);
+  const giveawaysRender = new RenderManager(
+    giveaways,
+    storeList,
+    giveawaysContainer,
+  );
+  const dealsRender = new RenderManager(deals, storeList, dealsContainer);
 
-  hero.createHero(heroContainer, renMan);
+  const hero = new Game(randomDeal, storeList);
+  hero.createHero(heroContainer, dealsRender);
 
-  renMan.renderFavorites(favoriteContainer, true);
-  renMan.renderListEvents(giveaways, giveawaysContainer, 4);
-  renMan.renderGameList(giveaways, giveawaysContainer, 4);
-  renMan.renderListEvents(deals, dealsContainer, 8);
-  renMan.renderGameList(deals, dealsContainer, 8);
+  dealsRender.renderFavorites(favoriteContainer, true);
+
+  dealsRender.renderGameList(8);
+  giveawaysRender.renderGameList(4);
 });
