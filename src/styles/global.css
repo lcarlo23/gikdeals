@@ -171,9 +171,15 @@ footer {
   right: 1rem;
 }
 
-.fav-link {
+nav {
   font-family: "Orbitron", sans-serif;
-  margin-left: auto;
-  margin-right: 2rem;
   font-weight: 900;
+  margin-left: auto;
+  margin-right: 1rem;
+  display: flex;
+  gap: 1rem;
+
+  a.is-active {
+    color: var(--accent-color);
+  }
 }

@@ -18,6 +18,8 @@ export default defineConfig({
         main: resolve(__dirname, "src/index.html"),
         search: resolve(__dirname, "src/search/index.html"),
         favorites: resolve(__dirname, "src/favorites/index.html"),
+        giveaways: resolve(__dirname, "src/giveaways/index.html"),
+        deals: resolve(__dirname, "src/deals/index.html"),
       },
     },
   },

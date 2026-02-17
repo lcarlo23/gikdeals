@@ -12,4 +12,12 @@ export async function loadHeaderFooter() {
 
   headerContainer.innerHTML = header;
   footerContainer.innerHTML = footer;
+
+  const pageTitle = document.getElementById("page-title");
+  const nav = document.querySelectorAll("header nav a");
+
+  nav.forEach((link) => {
+    if (pageTitle.textContent === link.textContent)
+      link.classList.add("is-active");
+  });
 }
