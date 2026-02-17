@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const randomDeal = await api.getRandomDeal();
   const giveaways = await api.getGiveaways();
-  const deals = await api.getDeals();
+  const deals = await api.getDeals(8);
   const storeList = await api.getStoresList();
 
   const giveawaysRender = new RenderManager(

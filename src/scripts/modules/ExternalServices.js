@@ -36,7 +36,7 @@ export default class ExternalServices {
 
   async getDeals(limit = 60) {
     const deals = await this.getData(
-      `${this.cheapSharkURL}deals?pageSize=${limit}`,
+      `${this.cheapSharkURL}deals?pageSize=${limit}&lowerPrice=0.01`,
     );
     return deals;
   }

@@ -41,7 +41,7 @@ export default class Game {
     card.classList.add("card");
     card.dataset.id = this.id;
 
-    if (this.salePrice === "$0.00" || this.salePrice === "") {
+    if (this.salePrice === "") {
       card.classList.add("free");
     }
 
