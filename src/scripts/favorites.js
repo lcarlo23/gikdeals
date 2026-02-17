@@ -8,21 +8,26 @@ import FavoritesManager from "./modules/FavoritesManager";
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
+  document.body.classList.add("is-loading");
   const favMan = new FavoritesManager();
   const favorites = favMan.getFavorites();
 
-  const api = new ExternalServices();
-  const storeList = await api.getStoresList();
+  if (favorites.length > 0) {
+    const api = new ExternalServices();
+    const storeList = await api.getStoresList();
 
-  const container = document.getElementById("deals");
+    const container = document.getElementById("deals");
 
-  const favRender = new RenderManager(
-    favorites,
-    storeList,
-    container,
-    true,
-    true,
-  );
+    const favRender = new RenderManager(
+      favorites,
+      storeList,
+      container,
+      true,
+      true,
+    );
 
-  favRender.renderGameList(999, 0);
+    favRender.renderGameList(999, 0);
+  }
+
+  document.body.classList.remove("is-loading");
 });

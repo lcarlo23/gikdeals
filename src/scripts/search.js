@@ -7,6 +7,7 @@ import ExternalServices from "./modules/ExternalServices";
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
+  document.body.classList.add("is-loading");
   const params = new URLSearchParams(window.location.search);
   const term = params.get("term").replace("+", " ").toUpperCase();
   const titleElement = document.getElementById("page-title");
@@ -27,4 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   searchRender.renderGameList(999, 0);
+
+  document.body.classList.remove("is-loading");
 });

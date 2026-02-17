@@ -36,13 +36,13 @@ export default class ExternalServices {
 
   async getDeals(limit = 60, urlParams = "", onSale = 1, lowerPrice = "0.01") {
     const deals = await this.getData(
-      `${this.cheapSharkURL}deals?pageSize=${limit}&lowerPrice=${lowerPrice}${urlParams}&onSale=${onSale}`,
+      `${this.cheapSharkURL}deals?pageSize=${limit}&sortBy=Recent&lowerPrice=${lowerPrice}${urlParams}&onSale=${onSale}`,
     );
     return deals;
   }
 
   async getRandomDeal() {
-    const deals = await this.getDeals(20);
+    const deals = await this.getDeals(20, "&sortBy=DealRating");
 
     if (!deals || deals.length === 0) return null;
 

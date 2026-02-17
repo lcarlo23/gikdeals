@@ -19,7 +19,7 @@ export default class RenderManager {
     this.api = new ExternalServices();
     this.favMan = new FavoritesManager();
 
-    this.sort = "DealRating";
+    this.sort = "Recent";
     this.storeFilter = "reset";
     this.originalList = list;
     this.end = 999;
@@ -127,6 +127,7 @@ export default class RenderManager {
     this.updateActiveFilters();
 
     const container = this.parent.querySelector(".cards-container");
+
     if (container) container.replaceChildren();
 
     for (const item of this.list.slice(start, start + end)) {
@@ -274,32 +275,30 @@ export default class RenderManager {
     });
   }
 
-  renderFavorites(element = this.parent, list = false) {
-    element.innerHTML = "";
+  renderFavorites() {
+    const favContainer = document.getElementById("fav-list");
+    favContainer.innerHTML = "";
 
     const favMan = new FavoritesManager();
     const favorites = favMan.getFavorites();
 
     if (favorites.length === 0) {
-      element.innerHTML = `<p class="no-fav">NO FAVORITES YET<br>You can add/remove a game from this list by clicking on the star icon</p>`;
+      favContainer.innerHTML = `<p class="no-fav">NO FAVORITES YET<br>You can add/remove a game from this list by clicking on the star icon</p>`;
       return;
     }
+    const favList = favorites.slice(-5).toReversed();
 
-    if (list) {
-      const favList = favorites.slice(-5).toReversed();
+    favList.forEach((fav) => {
+      const card = document.createElement("div");
+      card.classList.add("card-list");
 
-      favList.forEach((fav) => {
-        const card = document.createElement("div");
-        card.classList.add("card-list");
-
-        card.innerHTML = `
+      card.innerHTML = `
           <img src="${fav.thumb || fav.gameInfo?.thumb || fav.thumbnail}" width="80" height="80" />
           <p class="fav-title">${fav.title || fav.name || fav.gameInfo.name}</p>
         `;
 
-        element.appendChild(card);
-      });
-    }
+      favContainer.appendChild(card);
+    });
   }
 
   async updateFavorites(id, target) {

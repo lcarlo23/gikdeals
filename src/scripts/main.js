@@ -8,6 +8,7 @@ import { loadHeaderFooter } from "./modules/utils";
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
+  document.body.classList.add("is-loading");
   const heroContainer = document.getElementById("hero");
   const favoriteContainer = document.getElementById("fav-list");
   const dealsContainer = document.querySelector("#best-deals");
@@ -34,4 +35,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   dealsRender.renderGameList(8);
   giveawaysRender.renderGameList(4);
+
+  document.body.classList.remove("is-loading");
 });

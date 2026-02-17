@@ -7,6 +7,7 @@ import ExternalServices from "./modules/ExternalServices";
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
+  document.body.classList.add("is-loading");
   const api = new ExternalServices();
   const storeList = await api.getStoresList();
   const list = await api.getDeals();
@@ -16,4 +17,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const dealsRender = new RenderManager(list, storeList, container, true);
 
   dealsRender.renderGameList(999, 0);
+
+  document.body.classList.remove("is-loading");
 });
