@@ -407,7 +407,14 @@ export default class RenderManager {
       });
     }
 
-    this.renderGameList();
+    if (this.list.length > 0) {
+      this.renderGameList();
+    } else {
+      const container = this.parent.querySelector(".cards-container");
+      container.innerHTML = `
+      <p class="empty-message">NO DEALS AVAILABLE FOR THE SELECTED STORE</p>
+      `;
+    }
   }
 
   updateActiveFilters() {
