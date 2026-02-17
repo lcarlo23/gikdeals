@@ -19,8 +19,8 @@ export default class RenderManager {
     this.api = new ExternalServices();
     this.favMan = new FavoritesManager();
 
-    this.sort = "";
-    this.storeFilter = "all";
+    this.sort = "DealRating";
+    this.storeFilter = "reset";
     this.originalList = list;
     this.end = 999;
     this.start = 0;
@@ -327,7 +327,10 @@ export default class RenderManager {
   async applyFilterSort() {
     this.list = [...this.originalList];
 
-    if (this.storeFilter === "reset") this.storeFilter = "all";
+    if (this.storeFilter === "reset") {
+      this.storeFilter = "all";
+      this.store = "";
+    }
 
     if (this.storeFilter !== "all") {
       if (this.isDeal && !this.isSearch) {

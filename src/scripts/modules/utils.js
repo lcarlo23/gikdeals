@@ -17,7 +17,7 @@ export async function loadHeaderFooter() {
   const nav = document.querySelectorAll("header nav a");
 
   nav.forEach((link) => {
-    if (pageTitle.textContent === link.textContent)
+    if (pageTitle?.textContent === link.textContent)
       link.classList.add("is-active");
   });
 }
