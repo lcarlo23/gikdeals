@@ -13,14 +13,12 @@ export async function loadHeaderFooter() {
   headerContainer.innerHTML = header;
   footerContainer.innerHTML = footer;
 
-  const pageTitle = document.getElementById("page-title");
   const nav = document.querySelectorAll("header nav a");
-
+  const pageTitle = document.getElementById("page-title");
   navSelector(nav, pageTitle);
 
   const search = document.getElementById("search");
   const recent = document.getElementById("recent-search");
-
   search.addEventListener("focusin", () => {
     search.classList.add("is-active");
     recentSearches(recent);
@@ -29,6 +27,11 @@ export async function loadHeaderFooter() {
     search.classList.remove("is-active");
     recent.classList.remove("is-active");
   });
+
+  const lastVisitPar = document.getElementById("last-visit");
+  if (lastVisitPar) lastVisitPar.textContent = lastVisitMsg();
+
+  setLastVisit();
 }
 
 export function saveSearch(term) {
@@ -97,4 +100,16 @@ export function isViewed(id) {
   const viewed = getViewed();
 
   return viewed.includes(String(id));
+}
+
+function setLastVisit() {
+  const now = new Date().toLocaleString();
+  localStorage.setItem("lastVisit", now);
+}
+
+function lastVisitMsg() {
+  let lastVisit = localStorage.getItem("lastVisit");
+  return lastVisit
+    ? `Last visited: ${lastVisit}`
+    : "Welcome for the first time!";
 }
