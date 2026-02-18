@@ -116,7 +116,7 @@ header {
     position: relative;
     transform: scale(1);
     transition: transform 0.25s ease-in-out;
-    z-index: 10;
+    z-index: 9;
 
     &.is-active {
       transform: scale(1.5) translate(-2.25rem, 0.25rem);
