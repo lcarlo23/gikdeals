@@ -325,8 +325,6 @@ export default class RenderManager {
 
     const favoriteContainer = document.getElementById("fav-list");
     if (favoriteContainer) this.renderFavorites(favoriteContainer, true);
-
-    this.renderGameList();
   }
 
   async applyFilterSort() {

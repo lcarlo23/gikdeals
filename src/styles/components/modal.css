@@ -7,7 +7,7 @@ dialog.modal {
   outline: none;
 
   &[open]::backdrop {
-    animation: blur 0.25s ease forwards;
+    animation: blur 0.5s ease forwards;
   }
 
   .description {
