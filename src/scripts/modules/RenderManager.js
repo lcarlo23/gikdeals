@@ -1,4 +1,4 @@
-import { loadTemplate } from "./utils";
+import { loadTemplate, saveViewed } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Game from "./Game";
 import Store from "./Store";
@@ -92,7 +92,10 @@ export default class RenderManager {
         return;
       }
 
-      if (card) this.renderModal(id, !isNaN(Number(id)));
+      if (card) {
+        this.renderModal(id, !isNaN(Number(id)));
+        saveViewed(id);
+      }
 
       if (sort) {
         sortPanel.classList.toggle("is-active");
@@ -160,8 +163,18 @@ export default class RenderManager {
       container.appendChild(card);
 
       const fav = card.querySelector(`[data-id="${game.id}"] .favorite-btn`);
+      const coverContainer = card.querySelector(".cover-container");
+
       if (!this.isDeal) fav.remove();
       if (game.isFavorite && fav) fav.classList.add("is-active");
+
+      if (game.isViewed && coverContainer) {
+        const viewMsg = document.createElement("p");
+        viewMsg.classList.add("viewed");
+        viewMsg.textContent = "RECENTLY VIEWED";
+
+        coverContainer.appendChild(viewMsg);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { loadTemplate } from "./utils";
+import { isViewed, loadTemplate } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Store from "./Store";
 import LocalStoreManager from "./FavoritesManager";
@@ -10,7 +10,6 @@ export default class Game {
   constructor(data, storeList) {
     this.data = data;
     this.storeList = storeList;
-    this.isFavorite = localMan.isFavorite(data);
 
     this.image =
       this.data.image || this.data.thumb || this.data.thumbnail || "";
@@ -23,12 +22,17 @@ export default class Game {
 
     const sale = this.data.salePrice || this.data.cheapest;
     this.salePrice = sale ? `$${sale}` : "";
+
     this.price = this.data.normalPrice
       ? `$${this.data.normalPrice}`
       : this.data.worth || "";
     this.id =
       this.data.dealID || this.data.id || this.data.cheapestDealID || "";
     this.date = this.data.end_date || "";
+
+    this.isFavorite = localMan.isFavorite(data);
+
+    this.isViewed = isViewed(this.id);
 
     this.setStore();
   }

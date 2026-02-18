@@ -77,3 +77,24 @@ export function recentSearches(element) {
 
   element.classList.add("is-active");
 }
+
+export function getViewed() {
+  const viewed = localStorage.getItem("viewed");
+  return viewed ? JSON.parse(viewed) : [];
+}
+
+export function saveViewed(card) {
+  const viewed = getViewed();
+
+  if (viewed.includes(card)) return;
+
+  viewed.push(card);
+
+  localStorage.setItem("viewed", JSON.stringify(viewed));
+}
+
+export function isViewed(id) {
+  const viewed = getViewed();
+
+  return viewed.includes(String(id));
+}
