@@ -25,11 +25,11 @@ export default class RenderManager {
     this.originalList = list;
     this.end = 16;
     this.start = 0;
-    this.sorted = false;
     this.store = "";
     this.isDeal = isDeal;
     this.isSearch = isSearch;
     this.isInfinite = isInfinite;
+    this.isFilter = false;
 
     this.loadFilters();
     this.loadEvents();
@@ -144,7 +144,7 @@ export default class RenderManager {
           const newStart = this.start + this.end;
 
           if (newStart < this.list.length) {
-            this.renderGameList(this.end, newStart, true);
+            this.renderGameList(this.end, newStart);
           }
         }
       });
@@ -158,9 +158,10 @@ export default class RenderManager {
     this.updateActiveFilters();
 
     const container = this.parent.querySelector(".cards-container");
-    if (!this.isInfinite) {
+    if (!this.isInfinite || this.isFilter) {
       container.replaceChildren();
       container.scrollTop = 0;
+      this.isFilter = false;
     }
 
     for (const item of this.list.slice(start, start + end)) {
@@ -407,7 +408,7 @@ export default class RenderManager {
 
     if (this.isDeal && !this.isSearch) {
       this.list = await this.api.getDeals(
-        this.end,
+        999,
         this.store?.storeID
           ? `&storeID=${this.store.storeID}&sortBy=${this.sort}`
           : `&sortBy=${this.sort}`,
@@ -458,7 +459,8 @@ export default class RenderManager {
     }
 
     if (this.list.length > 0) {
-      this.renderGameList();
+      this.isFilter = true;
+      this.renderGameList(this.end, 0);
     } else {
       const container = this.parent.querySelector(".cards-container");
       container.innerHTML = `
