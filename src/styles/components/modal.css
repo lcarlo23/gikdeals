@@ -5,9 +5,18 @@ dialog.modal {
   color: var(--text-color);
   max-width: 50rem;
   outline: none;
+  transform: scale(1);
+  opacity: 1;
+  transition:
+    transform 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
 
-  &[open]::backdrop {
-    animation: blur 0.5s ease forwards;
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(0.25rem);
+    transition:
+      background-color 0.5s ease-in-out,
+      backdrop-filter 0.5s ease-in-out;
   }
 
   .description {
@@ -115,13 +124,13 @@ dialog.modal {
   }
 }
 
-@keyframes blur {
-  from {
+@starting-style {
+  dialog[open] {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  dialog[open]::backdrop {
     background-color: rgba(0, 0, 0, 0);
     backdrop-filter: blur(0);
-  }
-  to {
-    background-color: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(0.25rem);
   }
 }
