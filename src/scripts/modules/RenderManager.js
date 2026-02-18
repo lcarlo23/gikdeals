@@ -22,7 +22,7 @@ export default class RenderManager {
     this.sort = "Recent";
     this.storeFilter = "reset";
     this.originalList = list;
-    this.end = 999;
+    this.end = 16;
     this.start = 0;
     this.sorted = false;
     this.store = "";
@@ -118,23 +118,40 @@ export default class RenderManager {
         this.applyFilterSort();
       }
     });
+
+    const container = this.parent.querySelector(".cards-container");
+
+    if (container) {
+      window.addEventListener("scroll", () => {
+        const isBottom =
+          window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 200;
+        if (isBottom) {
+          const newStart = this.start + this.end;
+
+          if (newStart < this.list.length) {
+            this.renderGameList(this.end, newStart, true);
+          }
+        }
+      });
+    }
   }
 
-  async renderGameList(end = this.end, start = this.start) {
+  async renderGameList(end = this.end, start = this.start, append = false) {
     this.end = end;
     this.start = start;
 
     this.updateActiveFilters();
 
     const container = this.parent.querySelector(".cards-container");
-
-    if (container) container.replaceChildren();
+    if (!append) {
+      container.replaceChildren();
+      container.scrollTop = 0;
+    }
 
     for (const item of this.list.slice(start, start + end)) {
       const game = new Game(item, this.storeList);
-
       const card = await game.createCard();
-
       container.appendChild(card);
 
       const fav = card.querySelector(`[data-id="${game.id}"] .favorite-btn`);
@@ -274,7 +291,9 @@ export default class RenderManager {
         return;
       }
 
-      if (closeBtn) modal.remove();
+      if (closeBtn) {
+        modal.close();
+      }
     });
   }
 
@@ -330,6 +349,7 @@ export default class RenderManager {
   async applyFilterSort() {
     this.parent.classList.add("is-loading");
     this.list = [...this.originalList];
+    this.start = 0;
 
     if (this.storeFilter === "reset") {
       this.storeFilter = "all";

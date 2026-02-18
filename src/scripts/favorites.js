@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       true,
     );
 
-    favRender.renderGameList(999, 0);
+    favRender.renderGameList();
   }
 
   document.body.classList.remove("is-loading");

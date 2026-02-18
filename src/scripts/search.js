@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     true,
   );
 
-  searchRender.renderGameList(999, 0);
+  searchRender.renderGameList();
 
   document.body.classList.remove("is-loading");
 });

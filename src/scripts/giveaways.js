@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const giveawaysRender = new RenderManager(list, storeList, container);
 
-  giveawaysRender.renderGameList(999, 0);
+  giveawaysRender.renderGameList();
 
   document.body.classList.remove("is-loading");
 });
