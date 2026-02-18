@@ -111,7 +111,16 @@ header {
   align-items: center;
   flex-wrap: wrap;
   background: var(--secondary-bg-color);
-  max-height: 3rem;
+
+  #search {
+    transform: scale(1);
+    transition: transform 0.5s ease-in-out;
+
+    &.is-active {
+      transform: scale(1.5) translate(-2.25rem, 0.25rem);
+      box-shadow: 0 0 2rem black;
+    }
+  }
 
   input {
     border-radius: 0.25rem;

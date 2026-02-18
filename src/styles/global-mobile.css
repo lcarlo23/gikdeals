@@ -6,7 +6,12 @@
     nav {
       margin: auto;
     }
+
+    #search.is-active {
+      transform: scale(1.5);
+    }
   }
+
   #hero-section {
     display: flex;
     flex-direction: column;

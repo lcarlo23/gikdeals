@@ -16,6 +16,19 @@ export async function loadHeaderFooter() {
   const pageTitle = document.getElementById("page-title");
   const nav = document.querySelectorAll("header nav a");
 
+  navSelector(nav, pageTitle);
+
+  const search = document.getElementById("search");
+
+  search.addEventListener("focus", () => {
+    search.classList.add("is-active");
+  });
+  search.addEventListener("blur", () => {
+    search.classList.remove("is-active");
+  });
+}
+
+export function navSelector(nav, pageTitle) {
   nav.forEach((link) => {
     if (pageTitle?.textContent === link.textContent)
       link.classList.add("is-active");
