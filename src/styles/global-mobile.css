@@ -67,6 +67,7 @@
     height: 100%;
     overflow-y: auto;
     border-radius: 0;
+    transform: none;
 
     .img-bg {
       transform: scale(1);
@@ -108,10 +109,6 @@
       .rating {
         flex-direction: column;
         align-items: flex-start;
-
-        .rate-box {
-          margin: auto;
-        }
       }
     }
 
