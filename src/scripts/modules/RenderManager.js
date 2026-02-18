@@ -11,6 +11,7 @@ export default class RenderManager {
     parentElement,
     isDeal = false,
     isSearch = false,
+    isInfinite = false,
   ) {
     this.list = list;
     this.storeList = storeList;
@@ -28,6 +29,7 @@ export default class RenderManager {
     this.store = "";
     this.isDeal = isDeal;
     this.isSearch = isSearch;
+    this.isInfinite = isInfinite;
 
     this.loadFilters();
     this.loadEvents();
@@ -67,6 +69,12 @@ export default class RenderManager {
   }
 
   async loadEvents() {
+    const sortPanel = this.parent.querySelector(".sort-panel");
+    const filterPanel = this.parent.querySelector(".filter-panel");
+
+    sortPanel.classList.add("animate");
+    filterPanel.classList.add("animate");
+
     this.parent.addEventListener("click", (e) => {
       const target = e.target;
 
@@ -76,9 +84,6 @@ export default class RenderManager {
       const filterData = target.closest("[data-filter]");
       const card = target.closest(".card");
       const fav = target.closest(".favorite-btn");
-
-      const sortPanel = this.parent.querySelector(".sort-panel");
-      const filterPanel = this.parent.querySelector(".filter-panel");
 
       const id = card?.dataset.id;
 
@@ -121,7 +126,7 @@ export default class RenderManager {
 
     const container = this.parent.querySelector(".cards-container");
 
-    if (container) {
+    if (container && this.isInfinite) {
       window.addEventListener("scroll", () => {
         const isBottom =
           window.innerHeight + window.scrollY >=
@@ -137,14 +142,14 @@ export default class RenderManager {
     }
   }
 
-  async renderGameList(end = this.end, start = this.start, append = false) {
+  async renderGameList(end = this.end, start = this.start) {
     this.end = end;
     this.start = start;
 
     this.updateActiveFilters();
 
     const container = this.parent.querySelector(".cards-container");
-    if (!append) {
+    if (!this.isInfinite) {
       container.replaceChildren();
       container.scrollTop = 0;
     }

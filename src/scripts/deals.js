@@ -14,7 +14,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const container = document.getElementById("deals");
 
-  const dealsRender = new RenderManager(list, storeList, container, true);
+  const dealsRender = new RenderManager(
+    list,
+    storeList,
+    container,
+    true,
+    false,
+    true,
+  );
 
   dealsRender.renderGameList();
 

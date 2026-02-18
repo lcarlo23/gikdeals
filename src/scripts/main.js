@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   dealsRender.renderFavorites(favoriteContainer, true);
 
-  dealsRender.renderGameList(8);
-  giveawaysRender.renderGameList(4);
+  dealsRender.renderGameList(8, 0);
+  giveawaysRender.renderGameList(4, 0);
 
   document.body.classList.remove("is-loading");
 });
