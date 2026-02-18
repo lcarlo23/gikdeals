@@ -182,7 +182,7 @@ header {
 }
 
 a {
-  color: var(--button-color);
+  color: var(--text-color);
   text-decoration: none;
   transition: color 0.15s ease;
 
@@ -257,9 +257,33 @@ nav {
 
   a {
     color: var(--text-color);
+    position: relative;
 
-    &.is-active {
-      color: var(--accent-color);
+    &:hover {
+      color: inherit;
+    }
+
+    &::after,
+    &.is-active::after {
+      content: "";
+      position: absolute;
+      bottom: -0.25rem;
+      left: 0;
+      height: 0.25rem;
+      width: 100%;
+      background: var(--bg-button);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease-in-out;
+    }
+
+    &:hover::after,
+    &.is-active::after {
+      transform: scaleX(1);
+    }
+
+    &:not(:hover)::after {
+      transform-origin: right;
     }
   }
 }

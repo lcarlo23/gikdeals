@@ -268,11 +268,11 @@ export default class RenderManager {
     let modalContent = template
       .replace("{{img-bg}}", image)
       .replace("{{cover}}", image)
-      .replace("{{title}}", title)
+      .replaceAll("{{title}}", title)
       .replace("{{releaseDate}}", releaseDate)
       .replace("{{endDate}}", endDate)
-      .replace("{{storeName}}", store?.getName() || "")
-      .replace("{{platform}}", store?.getLogo() || "")
+      .replaceAll("{{storeName}}", store?.getName() || "")
+      .replaceAll("{{platform}}", store?.getLogo() || "")
       .replace("{{price}}", price)
       .replace("{{storePage}}", storePage);
 

@@ -51,8 +51,8 @@ export default class Game {
     const cardContent = template
       .replace("{{img-bg}}", this.image)
       .replace("{{cover}}", this.image)
-      .replace("{{title}}", this.title)
-      .replace("{{platform}}", this.store?.getLogo() || "")
+      .replaceAll("{{title}}", this.title)
+      .replaceAll("{{platform}}", this.store?.getLogo() || "")
       .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price)
       .replaceAll("{{store-name}}", this.store?.getName() || "");
@@ -80,8 +80,8 @@ export default class Game {
     const cardContent = template
       .replace("{{img-bg}}", this.image)
       .replace("{{cover}}", this.image)
-      .replace("{{title}}", this.title)
-      .replace("{{platform}}", this.store?.getLogo())
+      .replaceAll("{{title}}", this.title)
+      .replaceAll("{{platform}}", this.store?.getLogo())
       .replace("{{storePage}}", storePage)
       .replace("{{sale}}", this.salePrice)
       .replace("{{price}}", this.price)
