@@ -54,7 +54,8 @@ export default class Game {
       .replace("{{title}}", this.title)
       .replace("{{platform}}", this.store?.getLogo() || "")
       .replace("{{sale}}", this.salePrice)
-      .replace("{{price}}", this.price);
+      .replace("{{price}}", this.price)
+      .replaceAll("{{store-name}}", this.store?.getName() || "");
 
     card.innerHTML = cardContent;
 
@@ -83,7 +84,8 @@ export default class Game {
       .replace("{{platform}}", this.store?.getLogo())
       .replace("{{storePage}}", storePage)
       .replace("{{sale}}", this.salePrice)
-      .replace("{{price}}", this.price);
+      .replace("{{price}}", this.price)
+      .replaceAll("{{store-name}}", this.store?.getName() || "");
 
     card.innerHTML = cardContent;
     card.dataset.id = this.id;
