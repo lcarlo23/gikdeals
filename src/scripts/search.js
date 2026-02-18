@@ -1,7 +1,7 @@
 import "/styles/main.css";
 
 import RenderManager from "./modules/RenderManager";
-import { loadHeaderFooter } from "./modules/utils";
+import { loadHeaderFooter, saveSearch } from "./modules/utils";
 import ExternalServices from "./modules/ExternalServices";
 
 loadHeaderFooter();
@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const titleElement = document.getElementById("page-title");
   const container = document.getElementById("deals");
 
+  saveSearch(term);
+
   titleElement.textContent = term;
 
   const api = new ExternalServices();
@@ -23,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     list,
     storeList,
     container,
+    true,
     true,
     true,
   );

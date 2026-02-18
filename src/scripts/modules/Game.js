@@ -1,16 +1,16 @@
 import { loadTemplate } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Store from "./Store";
-import FavoritesManager from "./FavoritesManager";
+import LocalStoreManager from "./FavoritesManager";
 
 const api = new ExternalServices();
-const favMan = new FavoritesManager();
+const localMan = new LocalStoreManager();
 
 export default class Game {
   constructor(data, storeList) {
     this.data = data;
     this.storeList = storeList;
-    this.isFavorite = favMan.isFavorite(data);
+    this.isFavorite = localMan.isFavorite(data);
 
     this.image =
       this.data.image || this.data.thumb || this.data.thumbnail || "";

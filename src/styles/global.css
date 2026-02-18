@@ -113,20 +113,71 @@ header {
   background: var(--secondary-bg-color);
 
   #search {
+    position: relative;
     transform: scale(1);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.25s ease-in-out;
+    z-index: 10;
 
     &.is-active {
       transform: scale(1.5) translate(-2.25rem, 0.25rem);
       box-shadow: 0 0 2rem black;
+
+      input {
+        border-radius: 0.25rem 0.25rem 0 0;
+      }
+    }
+
+    input {
+      border-radius: 0.25rem;
+      padding: 0.25rem 1rem;
+      border: none;
+      background-color: var(--text-color);
+      outline: none;
     }
   }
 
-  input {
-    border-radius: 0.25rem;
-    padding: 0.25rem 1rem;
-    border: none;
+  #recent-search {
+    position: absolute;
+    top: 100%;
     background-color: var(--text-color);
+    color: var(--bg-color);
+    width: 100%;
+    border-radius: 0 0 0.25rem 0.25rem;
+    overflow: hidden;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.25s ease-in-out;
+    pointer-events: none;
+
+    &.is-active {
+      transform: scaleY(1);
+    }
+
+    p {
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      pointer-events: all;
+      width: 100%;
+      border-radius: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      background-image: none;
+      padding: 0.25rem 1rem;
+      color: var(--bg-color);
+      transition: transform 0.25s ease-in-out;
+
+      &:hover {
+        background: var(--bg-button);
+        color: var(--text-color);
+        transform: translateX(1rem);
+      }
+    }
   }
 }
 
