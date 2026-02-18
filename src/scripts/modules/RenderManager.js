@@ -52,7 +52,13 @@ export default class RenderManager {
       let filterStore = [];
 
       if (this.isDeal && !this.isSearch) {
-        this.storeList.forEach((store) => filterStore.push(store.storeName));
+        this.storeList = this.storeList.sort((a, b) => {
+          return a.storeName.localeCompare(b.storeName);
+        });
+
+        this.storeList.forEach((store) => {
+          if (store.isActive) filterStore.push(store.storeName);
+        });
       } else {
         filterStore = await this.loadStoreList(this.list);
       }
