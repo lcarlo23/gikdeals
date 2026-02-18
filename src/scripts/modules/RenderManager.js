@@ -226,8 +226,15 @@ export default class RenderManager {
       image = game.image;
       title = game.title;
 
-      releaseDate = new Date(game.published_date).toLocaleDateString();
-      endDate = new Date(game.end_date).toLocaleDateString();
+      const dateMsg = "date not available";
+      const relDateConvert = new Date(game.published_date);
+      releaseDate = !isNaN(relDateConvert)
+        ? relDateConvert.toLocaleDateString()
+        : dateMsg;
+      const endDateConvert = new Date(game.end_date);
+      endDate = !isNaN(endDateConvert)
+        ? endDateConvert.toLocaleDateString()
+        : dateMsg;
 
       price = game.worth;
 
