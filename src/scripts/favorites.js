@@ -3,14 +3,14 @@ import "/styles/main.css";
 import RenderManager from "./modules/RenderManager";
 import { loadHeaderFooter } from "./modules/utils";
 import ExternalServices from "./modules/ExternalServices";
-import LocalStoreManager from "./modules/FavoritesManager";
+import FavoritesManager from "./modules/FavoritesManager";
 
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.body.classList.add("is-loading");
-  const localMan = new LocalStoreManager();
-  const favorites = localMan.getFavorites();
+  const favMan = new FavoritesManager();
+  const favorites = favMan.getFavorites();
 
   if (favorites.length > 0) {
     const api = new ExternalServices();

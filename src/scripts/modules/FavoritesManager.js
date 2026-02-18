@@ -1,4 +1,4 @@
-export default class LocalStoreManager {
+export default class FavoritesManager {
   constructor() {
     this.key = "favorites";
   }

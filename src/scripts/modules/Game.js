@@ -1,10 +1,10 @@
 import { isViewed, loadTemplate } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Store from "./Store";
-import LocalStoreManager from "./FavoritesManager";
+import FavoritesManager from "./FavoritesManager";
 
 const api = new ExternalServices();
-const localMan = new LocalStoreManager();
+const favMan = new FavoritesManager();
 
 export default class Game {
   constructor(data, storeList) {
@@ -30,7 +30,7 @@ export default class Game {
       this.data.dealID || this.data.id || this.data.cheapestDealID || "";
     this.date = this.data.end_date || "";
 
-    this.isFavorite = localMan.isFavorite(data);
+    this.isFavorite = favMan.isFavorite(data);
 
     this.isViewed = isViewed(this.id);
 

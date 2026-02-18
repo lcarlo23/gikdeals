@@ -2,7 +2,7 @@ import { loadTemplate, saveViewed } from "./utils";
 import ExternalServices from "./ExternalServices";
 import Game from "./Game";
 import Store from "./Store";
-import LocalStoreManager from "./FavoritesManager";
+import FavoritesManager from "./FavoritesManager";
 
 export default class RenderManager {
   constructor(
@@ -18,7 +18,7 @@ export default class RenderManager {
     this.parent = parentElement;
 
     this.api = new ExternalServices();
-    this.localMan = new LocalStoreManager();
+    this.favMan = new FavoritesManager();
 
     this.sort = "Recent";
     this.storeFilter = "reset";
@@ -302,11 +302,11 @@ export default class RenderManager {
 
     modal.showModal();
 
-    const localMan = new LocalStoreManager();
+    const favMan = new FavoritesManager();
     const favBtn = document.querySelector(
       `dialog[data-id="${id}"] .favorite-btn`,
     );
-    const isFavorite = localMan.isFavorite(game);
+    const isFavorite = favMan.isFavorite(game);
     if (isFavorite) favBtn.classList.add("is-active");
 
     modal.addEventListener("close", () => {
@@ -333,8 +333,8 @@ export default class RenderManager {
     const favContainer = document.getElementById("fav-list");
     favContainer.innerHTML = "";
 
-    const localMan = new LocalStoreManager();
-    const favorites = localMan.getFavorites();
+    const favMan = new FavoritesManager();
+    const favorites = favMan.getFavorites();
 
     if (favorites.length === 0) {
       favContainer.innerHTML = `<p class="no-fav">NO FAVORITES YET<br>You can add/remove a game from this list by clicking on the star icon</p>`;
@@ -364,7 +364,7 @@ export default class RenderManager {
 
     game.gameInfo.dealID = id;
 
-    this.localMan.toggleFavorites(game.gameInfo);
+    this.favMan.toggleFavorites(game.gameInfo);
 
     target.classList.toggle("is-active");
 
